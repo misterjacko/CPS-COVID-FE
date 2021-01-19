@@ -1,3 +1,7 @@
+## Some Background 
+The Chicago Public School District (CPS) is the 3rd largest school district in the United States[#]() serving more than 355,000 students in 642 Schools[#](https://www.cps.edu/about/stats-facts/). On #### with the first cases of COVID-19 being reported in the United States including cases in the Chicagoland area, all on-site learning was halted and classes transitioned to a remote model. As COVID-19 ravaged the United States and the world, the children remained home. The 2020 school year completed remote, and the 2021 school year began remote with a plan for future [hybrid learning]() in the works. With the coming of 2021, CPS pulled the trigger and opened their schools to students who opted in to in person learning with [plans in place]() to make learning safe. 
+
+
 ### contemporaneous notes
 
 
