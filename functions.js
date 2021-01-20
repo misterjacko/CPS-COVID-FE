@@ -2,6 +2,7 @@
 
 var mymap = L.map('mapid').setView([41.8249149, -87.6862769], 10.5);
 
+// sets the size of the case dot
 function dot(cases){
     dotObj = L.icon({
         iconUrl: 'dot.png',
@@ -21,7 +22,7 @@ var Light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
     subdomains: 'abcd',
     maxZoom: 19
-}).addTo(mymap);
+});
 controlLayers.addBaseLayer(Light, 'Light');
 
 var Dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
@@ -63,3 +64,29 @@ var data = Papa.parse(urlll, {
             }
     }
 });
+
+// function to set a given theme/color-scheme
+function setTheme(themeName) {
+    localStorage.setItem('theme', themeName);
+    document.documentElement.className = themeName;
+}
+// function to toggle between light and dark theme
+function toggleTheme() {
+   if (localStorage.getItem('theme') === 'theme-dark'){
+        Light.addTo(mymap);
+        setTheme('theme-light');
+   } else {
+       setTheme('theme-dark');
+       Dark.addTo(mymap);
+   }
+}
+// Immediately invoked function to set the theme on initial load
+(function () {
+   if (localStorage.getItem('theme') === 'theme-dark') {
+       setTheme('theme-dark');
+       Dark.addTo(mymap);
+   } else {
+       setTheme('theme-light');
+       Light.addTo(mymap);
+   }
+})();
