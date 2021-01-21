@@ -4,11 +4,18 @@ var mymap = L.map('mapid').setView([41.8249149, -87.6862769], 10.5);
 
 // sets the size of the case dot
 function dot(cases){
+    var dotFile = "";
+    if (cases == 0){
+        dotFile = "green-dot.png";
+    } else {
+        dotFile = "red-dot.png";
+    };
+    cases += 4; //making the minimum marker size 4
     dotObj = L.icon({
-        iconUrl: 'dot.png',
+        iconUrl: dotFile,
         iconSize:     [cases, cases], // size of the icon
         iconAnchor:   [cases/2, cases/2], // point of the icon which will correspond to marker's location
-        popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+        popupAnchor:  [0, -cases] // point from which the popup should open relative to the iconAnchor
     });
     return dotObj;
 };
@@ -57,7 +64,7 @@ var data = Papa.parse(urlll, {
             var popupStr = row.School + ': <br> Cases this Quarter:' + row["Q2 SY21"];
             var marker = L.marker([row.Latitude, row.Longitude], {
                 title: row.School,
-                icon: dot(row["Q2 SY21"]+4)
+                icon: dot(row["Q2 SY21"])
             }).bindPopup(popupStr);
             
             marker.addTo(mymap);

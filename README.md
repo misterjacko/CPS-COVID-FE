@@ -18,10 +18,16 @@ The site is hosted on S3 as a static site with CloudFront as a CDN provider. It 
 
 ## Known issues/technical debt
 - Because the data layer is a csv file, care needs to be taken as to the load put on client devices to download that file and the parsing that needs to happen to display the data. As the data-set grows, client load considerations may need to be revisited.
+- Light/dark toggle only works once. Thats not gonna fly. 
+
 
 ## TODO
 - More informative popouts ie. School histogram containing running 7 or 14 day averages, weekly summaries etc.
 - Search box to find and zoom in on school.
+- logic to change dot colors based on case numbers
+- make dots bigger as you zoom in
+- clean up css
+
 
 ## Contact
 - http://www.jakobondrey.com
