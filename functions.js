@@ -10,7 +10,7 @@ function dot(cases){
     } else {
         dotFile = "red-dot.png";
     };
-    cases += 4; //making the minimum marker size 4
+    cases += 10; //making the minimum marker size 4
     dotObj = L.icon({
         iconUrl: dotFile,
         iconSize:     [cases, cases], // size of the icon
@@ -25,17 +25,17 @@ var controlLayers = L.control.layers( null, null, {
     collapsed: false
 }).addTo(mymap);
 
-var Light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd',
-    maxZoom: 19
+var Light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	subdomains: 'abcd',
+	maxZoom: 19
 });
 controlLayers.addBaseLayer(Light, 'Light');
 
-var Dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd',
-    maxZoom: 19
+var Dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	subdomains: 'abcd',
+	maxZoom: 19
 });
 controlLayers.addBaseLayer(Dark, 'Dark');
 
