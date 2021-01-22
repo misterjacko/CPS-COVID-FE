@@ -1,5 +1,4 @@
 
-
 var mymap = L.map('mapid').setView([41.8249149, -87.6862769], 10.5);
 
 // sets the size of the case dot
@@ -57,7 +56,6 @@ var data = Papa.parse(urlll, {
         return h.trim();
     },
     complete: function(results) {
-        console.log(results.data);
         for (var i in results.data) {
             
             var row = results.data[i];
