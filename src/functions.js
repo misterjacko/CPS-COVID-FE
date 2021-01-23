@@ -1,5 +1,34 @@
-
+//set default map view
 var mymap = L.map('mapid').setView([41.8249149, -87.6862769], 10.5);
+//attempt to soom in on location and surrounding schools
+function getLocation() { 
+    // check to make sure geolocation is possible
+    if (navigator.geolocation) { 
+        var options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+        };
+        return navigator.geolocation.getCurrentPosition(success, error, options);
+    } else { 
+        console.log('Geolocation is not supported');
+    } 
+}; 
+
+function error(err) {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+};
+  
+function success(pos) { // need to add logic for if outside of a reasonable boundry (ie from spain)
+    var query = pos.coords.latitude + ',' + pos.coords.longitude;
+    console.log('coordinates: ' + query);
+    if ((41.64147109473022 < pos.coords.latitude < 42.02603353279949) && ((-87.85188495068708 < pos.coords.longitude) && (pos.coords.longitude < -87.5169044489204))) {
+        mymap.flyTo([pos.coords.latitude, pos.coords.longitude], 15);
+    };
+};
+// call responsive location function
+getLocation();
+
 
 // sets the size of the case dot
 function dot(cases){
@@ -57,18 +86,22 @@ var data = Papa.parse(urlll, {
     },
     complete: function(results) {
         for (var i in results.data) {
-            
             var row = results.data[i];
             var popupStr = row.School + ': <br> Cases this Quarter:' + row["Q2 SY21"];
             var marker = L.marker([row.Latitude, row.Longitude], {
                 title: row.School,
                 icon: dot(row["Q2 SY21"])
             }).bindPopup(popupStr);
-            
             marker.addTo(mymap);
-            }
+            };
+         
     }
+    
 });
+
+//would like to eventually use actual chicago outline instead of coordinate box. 
+// var chiLayer = new L.GeoJSON.AJAX("./data/Chicago.geojson");
+// chiLayer.addTo(mymap);
 
 // function to set a given theme/color-scheme
 function setTheme(themeName) {
