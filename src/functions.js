@@ -27,7 +27,7 @@ function success(pos) { // need to add logic for if outside of a reasonable boun
     };
 };
 // call responsive location function
-getLocation();
+// getLocation();
 
 
 // sets the size of the case dot
