@@ -1,5 +1,7 @@
 //set default map view
 var mymap = L.map('mapid').setView([41.8249149, -87.6862769], 10.5);
+
+
 //attempt to soom in on location and surrounding schools
 function getLocation() { 
     // check to make sure geolocation is possible
@@ -26,19 +28,23 @@ function success(pos) { // need to add logic for if outside of a reasonable boun
         mymap.flyTo([pos.coords.latitude, pos.coords.longitude], 15);
     };
 };
-// call responsive location function
-// getLocation();
-
 
 // sets the size of the case dot
 function dot(cases){
     var dotFile = "";
     if (cases == 0){
-        dotFile = "green-dot.png";
-    } else {
-        dotFile = "red-dot.png";
+        dotFile = "./images/dot0.png";
+    } else if (cases <= 1) {
+        dotFile = "./images/dot1.png";
+    } else if (cases <= 5) {
+        dotFile = "./images/dot2.png";
+    } else if (cases <= 10) {
+        dotFile = "./images/dot3.png";
+    } else if (cases <= 15) {
+        dotFile = "./images/dot4.png";
     };
-    cases += 10; //making the minimum marker size 4
+    //making the minimum marker size 4
+    cases = (cases + 10) + cases*2
     dotObj = L.icon({
         iconUrl: dotFile,
         iconSize:     [cases, cases], // size of the icon
@@ -48,7 +54,17 @@ function dot(cases){
     return dotObj;
 };
 
-var controlLayers = L.control.layers( null, null, {
+var scaleControlLayer = L.control({position: "topleft"});
+
+scaleControlLayer.onAdd = function(){
+    var div = L.DomUtil.create('div', 'myclass');
+    div.innerHTML= "<img src='./images/scale.jpg'/>";
+    return div;
+}
+
+scaleControlLayer.addTo(mymap);
+
+var mapControlLayer = L.control.layers( null, null, {
     position: "topright",
     collapsed: false
 }).addTo(mymap);
@@ -58,14 +74,14 @@ var Light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}
 	subdomains: 'abcd',
 	maxZoom: 19
 });
-controlLayers.addBaseLayer(Light, 'Light');
+mapControlLayer.addBaseLayer(Light, 'Light');
 
 var Dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
 	subdomains: 'abcd',
 	maxZoom: 19
 });
-controlLayers.addBaseLayer(Dark, 'Dark');
+mapControlLayer.addBaseLayer(Dark, 'Dark');
 
 var Watercolor = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
     attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -74,7 +90,7 @@ var Watercolor = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercol
     maxZoom: 16,
     ext: 'jpg'
 });
-controlLayers.addBaseLayer(Watercolor, 'Watercolor');
+mapControlLayer.addBaseLayer(Watercolor, 'Watercolor');
 
 var urlll = "https://s3.amazonaws.com/cpscovid.com/data/allCpsCovidData.csv"
 var data = Papa.parse(urlll, {
