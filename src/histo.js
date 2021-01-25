@@ -1,6 +1,6 @@
 // set the dimensions and margins of the graph
 var margin = {top: 30, right: 60, bottom: 30, left: 60},
-    width = 600 - margin.left - margin.right,
+    width = 500 - margin.left - margin.right,
     height = 200 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
@@ -49,10 +49,12 @@ d3.csv("./data/CPStotals.csv",
             .domain([0, (1.3 * d3.max(data, function(d) { return +d.running; }))])
             .range([ height, 0 ]);
         totalCase.append("g")
-            .call(d3.axisLeft(y));
+            .call(d3.axisLeft(y)
+            .ticks(7));
         totalCase.append("g")
-            .attr("transform", "translate(475,0)")
-            .call(d3.axisRight(y));  
+            .attr("transform", "translate(375,0)")
+            .call(d3.axisRight(y)
+            .ticks(7));  
         // text label for the yLeft axis
         totalCase.append("text")
             .attr("transform", "rotate(-90)")
@@ -131,10 +133,12 @@ d3.csv("./data/CPStotals.csv",
             .domain([0, (1.3 * d3.max(data, function(d) { return +d.daily; }))])
             .range([ dailyHeight, 0 ]);
         dailyCase.append("g")
-            .call(d3.axisLeft(yLeft));
+            .call(d3.axisLeft(yLeft)
+            .ticks(5));    
         dailyCase.append("g")
             .attr("transform", "translate(281,0)")
-            .call(d3.axisRight(yLeft));    
+            .call(d3.axisRight(yLeft)
+            .ticks(5));    
         // text label for the yLeft axis
         dailyCase.append("text")
             .attr("transform", "rotate(-90)")

@@ -36,15 +36,17 @@ function dot(cases){
         dotFile = "./images/dot0.png";
     } else if (cases <= 1) {
         dotFile = "./images/dot1.png";
-    } else if (cases <= 5) {
+    } else if (cases <= 3) {
         dotFile = "./images/dot2.png";
     } else if (cases <= 10) {
         dotFile = "./images/dot3.png";
-    } else if (cases <= 15) {
+    } else if (cases <= 30) {
         dotFile = "./images/dot4.png";
+    } else if (cases <= 100) {
+        dotFile = "./images/dot5.png";
     };
     //making the minimum marker size 4
-    cases = (cases + 10) + cases*2
+    cases = (cases + 12) + 1**(Math.sqrt(cases))
     dotObj = L.icon({
         iconUrl: dotFile,
         iconSize:     [cases, cases], // size of the icon
@@ -58,7 +60,7 @@ var scaleControlLayer = L.control({position: "topleft"});
 
 scaleControlLayer.onAdd = function(){
     var div = L.DomUtil.create('div', 'myclass');
-    div.innerHTML= "<img src='./images/scale.jpg'/>";
+    div.innerHTML= "<img src='./images/scale.png'/>";
     return div;
 }
 
