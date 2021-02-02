@@ -1,6 +1,43 @@
 //set default map view
-var mymap = L.map('mapid').setView([41.8249149, -87.6862769], 10.5);
+var mymap;
 
+function setMapView(lat, long, zoom) {
+return L.map('mapid').setView([lat, long], zoom);
+}
+
+function makeACircle(lat,long){
+    var size = 40;
+    var circle = L.marker([lat, long], {
+        icon: L.icon({
+            iconUrl: "./images/circle.png",
+            iconSize:     [size, size], // size of the icon
+            iconAnchor:   [size/2, size/2] // point of the icon which will correspond to marker's location
+        })
+    });
+    circle.addTo(mymap);
+}
+
+if (location.search.substring(1) != "") {
+    var parameters = location.search.substring(1).split("&");
+    var temp = parameters[1].split("=");
+    var lat = temp[1];
+    var temp = parameters[2].split("=");
+    var long = temp[1];
+
+    // perhaps add logic to require all three parameters as valid or zoom to default. 
+
+    //if (((long > longmin) && (long < longmax)) && ((lat > latmin) && (lat < latmix))) {
+    //     mymap = setMapView(lat, long, 15);
+    //     makeACircle(lat,long);
+    // } else {
+    //     mymap = setMapView(41.8249149, -87.6862769, 10.5);
+    // }
+    mymap = setMapView(lat, long, 15);
+    makeACircle(lat,long);
+    // find school location. 
+} else {
+ mymap = setMapView(41.8249149, -87.6862769, 10.5);
+}
 
 //attempt to soom in on location and surrounding schools
 function getLocation() { 
@@ -26,6 +63,8 @@ function success(pos) { // need to add logic for if outside of a reasonable boun
     console.log('coordinates: ' + query);
     if ((41.64147109473022 < pos.coords.latitude < 42.02603353279949) && ((-87.85188495068708 < pos.coords.longitude) && (pos.coords.longitude < -87.5169044489204))) {
         mymap.flyTo([pos.coords.latitude, pos.coords.longitude], 15);
+    } else {
+        alert('You are not close enough to Chicago. \n Zooming to your location would be pretty pointless.');
     };
 };
 
@@ -57,19 +96,17 @@ function dot(cases){
 };
 
 var scaleControlLayer = L.control({position: "topleft"});
-
 scaleControlLayer.onAdd = function(){
     var div = L.DomUtil.create('div', 'myclass');
     div.innerHTML= "<img src='./images/scale.png'/>";
     return div;
 }
-
 scaleControlLayer.addTo(mymap);
 
 var mapControlLayer = L.control.layers( null, null, {
     position: "topright",
     collapsed: false
-}).addTo(mymap);
+}) //.addTo(mymap);
 
 var Light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -94,28 +131,53 @@ var Watercolor = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercol
 });
 mapControlLayer.addBaseLayer(Watercolor, 'Watercolor');
 
-var urlll = "https://s3.amazonaws.com/cpscovid.com/data/allCpsCovidData.csv"
-var data = Papa.parse(urlll, {
+var AllDataurl = "https://s3.amazonaws.com/cpscovid.com/data/allCpsCovidData.csv"
+var data = Papa.parse(AllDataurl, {
     download: true,
     header: true, 
+    skipEmptyLines: true,
     dynamicTyping: true,
     transformHeader:function(h) {
         return h.trim();
     },
     complete: function(results) {
+        var dropdownList = [];
         for (var i in results.data) {
             var row = results.data[i];
-            var popupStr = row.School + ': <br> Cases this Quarter:' + row["Q2 SY21"];
+
+            var schoolH = row.School.replaceAll(" ", "-");
+            var linkstring = "?name="+schoolH+"&Lat="+row.Latitude+"&Long="+row.Longitude;
+            var schoolObj = {School: row.School, SchoolURL: linkstring};
+            dropdownList.push(schoolObj);
+
+            var rootURL = "https://cpscovid.com/school.html";
+            // var rootURL = "file:///C:/Users/ondre/code/CPS-COVID/CPS-COVID-FE/src/school.html";
+            var popupStr = '<a href="' + rootURL + linkstring + '">' + row.School + '</a>: <br> Cases this Quarter:' + row["Q2 SY21"];
             var marker = L.marker([row.Latitude, row.Longitude], {
                 title: row.School,
                 icon: dot(row["Q2 SY21"])
             }).bindPopup(popupStr);
             marker.addTo(mymap);
-            };
-         
+            
+        };
+        var dropDownBox = document.getElementById("schoolBox");
+        for (var i in dropdownList){
+            var schoolObj = dropdownList[i];
+            var el = document.createElement("option");
+            el.textContent = schoolObj.School;
+            el.value = [schoolObj.SchoolURL];
+            dropDownBox.appendChild(el);
+        }
     }
     
 });
+
+function gotoSchool(){
+    // var schoolURL = document.getElementById("schoolBox").value;
+    var rootURL = "https://cpscovid.com/school.html";
+    var rootURL = "file:///C:/Users/ondre/code/CPS-COVID/CPS-COVID-FE/src/school.html";
+    window.location.href = rootURL + schoolURL;
+}
 
 //would like to eventually use actual chicago outline instead of coordinate box. 
 // var chiLayer = new L.GeoJSON.AJAX("./data/Chicago.geojson");

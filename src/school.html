@@ -21,11 +21,10 @@
         <header>
             <br>
             <h1>Chicago Public Schools* COVID-19 Case Tracker</h1>
-            <p></p>
+            <p id="schoolName"></p>
             <h5>Currently a work in progress..</h5>
             <select id="schoolBox" onchange="gotoSchool();">
                 <option>Select a School</option>
-            </select>
             </select>
         </header>
     </div>
@@ -61,7 +60,9 @@
         <p>The data used to power this dashboard is publicly available and can be found <a href="https://www.cps.edu/school-reopening-2020/">here</a>.</p>
         <p align="right">Created with &hearts;. <a href="https://jakobondrey.com">jakobondrey.com</a></p>
     </div>
-    <script type="text/javascript" src="histo.js"></script>
+    <script type="text/javascript" src="schoolfunctions.js"></script>
     <script type="text/javascript" src="functions.js"></script>
+
+
 </body>
 </html>

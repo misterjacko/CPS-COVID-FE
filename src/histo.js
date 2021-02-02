@@ -13,6 +13,7 @@ var totalCase = d3.select("#totalCasesViz")
 
 //Read the data
 d3.csv("./data/CPStotals.csv",
+// d3.csv("https://s3.amazonaws.com/cpscovid.com/data/CPStotals.csv",
     // format variables:
     function(d){
         return { 
@@ -90,6 +91,8 @@ var dailyCase = d3.select("#dailyCasesViz")
 
 //Read the data
 d3.csv("./data/CPStotals.csv",
+// d3.csv("https://s3.amazonaws.com/cpscovid.com/data/CPStotals.csv",
+
     //  format variables:
     function(d){
         return { 
