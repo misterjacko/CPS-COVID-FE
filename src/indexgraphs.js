@@ -6,8 +6,8 @@ var margin = {top: 30, right: 60, bottom: 50, left: 60},
 // append the svg object to the body of the page
 var totalCase = d3.select("#totalCasesViz")
     .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", "0 0 500 200")
     .append("g")
         .attr("transform","translate(" + margin.left + "," + margin.top + ")");
 
@@ -87,8 +87,8 @@ var dailyMargin = {top: 30, right: 60, bottom: 50, left: 60},
 // append the svg object to the body of the page
 var dailyCase = d3.select("#dailyCasesViz")
     .append("svg")
-        .attr("width", dailyWidth + dailyMargin.left + dailyMargin.right)
-        .attr("height", dailyHeight + dailyMargin.top + dailyMargin.bottom)
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", "0 0 500 200")
     .append("g")
         .attr("transform","translate(" + dailyMargin.left + "," + dailyMargin.top + ")");
 
