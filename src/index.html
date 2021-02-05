@@ -30,26 +30,26 @@
         </header>
     </div>
     <div align="center" class="row">
-        <div class="col-sm-3" id="totalCasesViz"></div>
-        <div class="col-sm-3"></div>
-        <div class="col-sm-3" id="dailyCasesViz"></div>
+        <div class="col-sm-6" id="totalCasesViz"></div>
+        <div class="col-sm-6" id="dailyCasesViz"></div>
         <p></p>
     </div>
     <div class="row">
         <div class="col-sm-2">
             <div>
                 <input id="getLocation" type="button" value="Share Location" onclick="getLocation();"></input>
-                <label id="switch" class="switch">
-                    <input type="checkbox" onchange="toggleTheme()" id="slider">
-                    <span class="slider round"></span>
-                </label>
+
             </div>
+            <form action = "./index.html">
+                <input type="submit" value="Back Home" />
+            </form>
             <div>
                 <p></p>
                 <p>Read about CPS reopening plans <a href="https://www.cps.edu/school-reopening-2020/">here</a>.</p>
                 <p>Please help keep Chicago safe!</p>
                 <p>Self Report <a href="https://chicagopsprod.service-now.com/health?id=cps_self_report">HERE</a>.<br> 
-                    Note: Parents or guardians report on behalf of their own children. CPS Contact tracing Team does not accept or act on second hand reports, speculation, assumptions, or rumors. </p>
+                    <em>Note:</em> Parents or guardians report on behalf of their own children. CPS Contact tracing Team does not accept or act on second hand reports, speculation, assumptions, or rumors. </p>
+                 <p><a href="./faq.html">FAQ</a></p>   
             </div>
         </div>
         <div class="col-sm-10">
@@ -61,7 +61,7 @@
         <p>The data used to power this dashboard is publicly available and can be found <a href="https://www.cps.edu/school-reopening-2020/">here</a>.</p>
         <p align="right">Created with &hearts;. <a href="https://jakobondrey.com">jakobondrey.com</a></p>
     </div>
-    <script type="text/javascript" src="histo.js"></script>
+    <script type="text/javascript" src="indexgraphs.js"></script>
     <script type="text/javascript" src="functions.js"></script>
 </body>
 </html>

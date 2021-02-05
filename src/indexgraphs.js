@@ -1,5 +1,5 @@
 // set the dimensions and margins of the graph
-var margin = {top: 30, right: 60, bottom: 30, left: 60},
+var margin = {top: 30, right: 60, bottom: 50, left: 60},
     width = 500 - margin.left - margin.right,
     height = 200 - margin.top - margin.bottom;
 
@@ -13,7 +13,6 @@ var totalCase = d3.select("#totalCasesViz")
 
 //Read the data
 d3.csv("./data/CPStotals.csv",
-// d3.csv("https://s3.amazonaws.com/cpscovid.com/data/CPStotals.csv",
     // format variables:
     function(d){
         return { 
@@ -28,8 +27,13 @@ d3.csv("./data/CPStotals.csv",
             .range([ 0, width -5 ]);
         totalCase.append("g")
             .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x)
-            .ticks(7));
+            .call(d3.axisBottom(x))//.ticks(7))
+            .selectAll("text")
+                .style("text-anchor", "end")
+                .attr("dx", "-.8em")
+                .attr("dy", ".15em")
+                .attr("transform", "rotate(-65)");
+            
 
         // Add Title
         totalCase.append("text")
@@ -43,8 +47,7 @@ d3.csv("./data/CPStotals.csv",
         // add X lable
         totalCase.append("text")             
             .attr("transform", "translate(" + (width/2) + " ," + (height + margin.top + 20) + ")")
-            .style("text-anchor", "middle")
-            .text("Date");
+            .style("text-anchor", "middle");
       // Add Y axis
         var y = d3.scaleLinear()
             .domain([0, (1.3 * d3.max(data, function(d) { return +d.running; }))])
@@ -63,7 +66,7 @@ d3.csv("./data/CPStotals.csv",
             .attr("x",0 - (height / 2))
             .attr("dy", "1em")
             .style("text-anchor", "middle")
-            .text("Cumulative Cases"); 
+            .text("Cases"); 
 
         // cumulative trend line
         totalCase.append("path")
@@ -78,8 +81,8 @@ d3.csv("./data/CPStotals.csv",
     }
 );
 /// Daily cases
-var dailyMargin = {top: 30, right: 60, bottom: 30, left: 60},
-    dailyWidth = 400 - dailyMargin.left - dailyMargin.right,
+var dailyMargin = {top: 30, right: 60, bottom: 50, left: 60},
+    dailyWidth = 500 - dailyMargin.left - dailyMargin.right,
     dailyHeight = 200 - dailyMargin.top - dailyMargin.bottom;
 // append the svg object to the body of the page
 var dailyCase = d3.select("#dailyCasesViz")
@@ -91,8 +94,6 @@ var dailyCase = d3.select("#dailyCasesViz")
 
 //Read the data
 d3.csv("./data/CPStotals.csv",
-// d3.csv("https://s3.amazonaws.com/cpscovid.com/data/CPStotals.csv",
-
     //  format variables:
     function(d){
         return { 
@@ -123,13 +124,16 @@ d3.csv("./data/CPStotals.csv",
             .range([ 0, dailyWidth -5 ]);
         dailyCase.append("g")
             .attr("transform", "translate(0," + dailyHeight + ")")
-            .call(d3.axisBottom(x)
-            .ticks(7));
+            .call(d3.axisBottom(x))
+            .selectAll("text")
+                .style("text-anchor", "end")
+                .attr("dx", "-.8em")
+                .attr("dy", ".15em")
+                .attr("transform", "rotate(-65)");
         // add X lable
         dailyCase.append("text")             
             .attr("transform", "translate(" + (dailyWidth/2) + " ," + (dailyHeight + dailyMargin.top + 20) + ")")
-            .style("text-anchor", "middle")
-            .text("Date");
+            .style("text-anchor", "middle");
 
       // Add Y axis
         var yLeft = d3.scaleLinear()
@@ -139,7 +143,7 @@ d3.csv("./data/CPStotals.csv",
             .call(d3.axisLeft(yLeft)
             .ticks(5));    
         dailyCase.append("g")
-            .attr("transform", "translate(281,0)")
+            .attr("transform", "translate(381,0)")
             .call(d3.axisRight(yLeft)
             .ticks(5));    
         // text label for the yLeft axis
@@ -149,7 +153,7 @@ d3.csv("./data/CPStotals.csv",
             .attr("x",0 - (dailyHeight / 2))
             .attr("dy", "1em")
             .style("text-anchor", "middle")
-            .text("Daily Cases"); 
+            .text("Cases"); 
         
         // Daily case bars
         dailyCase.selectAll('.bar')

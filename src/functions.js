@@ -23,15 +23,6 @@ if (location.search.substring(1) != "") {
     var lat = temp[1];
     var temp = parameters[2].split("=");
     var long = temp[1];
-
-    // perhaps add logic to require all three parameters as valid or zoom to default. 
-
-    //if (((long > longmin) && (long < longmax)) && ((lat > latmin) && (lat < latmix))) {
-    //     mymap = setMapView(lat, long, 15);
-    //     makeACircle(lat,long);
-    // } else {
-    //     mymap = setMapView(41.8249149, -87.6862769, 10.5);
-    // }
     mymap = setMapView(lat, long, 15);
     makeACircle(lat,long);
     // find school location. 
@@ -103,33 +94,11 @@ scaleControlLayer.onAdd = function(){
 }
 scaleControlLayer.addTo(mymap);
 
-var mapControlLayer = L.control.layers( null, null, {
-    position: "topright",
-    collapsed: false
-}) //.addTo(mymap);
-
 var Light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
 	subdomains: 'abcd',
 	maxZoom: 19
-});
-mapControlLayer.addBaseLayer(Light, 'Light');
-
-var Dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-	subdomains: 'abcd',
-	maxZoom: 19
-});
-mapControlLayer.addBaseLayer(Dark, 'Dark');
-
-var Watercolor = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
-    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    subdomains: 'abcd',
-    minZoom: 1,
-    maxZoom: 16,
-    ext: 'jpg'
-});
-mapControlLayer.addBaseLayer(Watercolor, 'Watercolor');
+}).addTo(mymap);
 
 var AllDataurl = "https://s3.amazonaws.com/cpscovid.com/data/allCpsCovidData.csv"
 var data = Papa.parse(AllDataurl, {
@@ -173,38 +142,12 @@ var data = Papa.parse(AllDataurl, {
 });
 
 function gotoSchool(){
-    // var schoolURL = document.getElementById("schoolBox").value;
+    var schoolURL = document.getElementById("schoolBox").value;
     var rootURL = "https://cpscovid.com/school.html";
-    var rootURL = "file:///C:/Users/ondre/code/CPS-COVID/CPS-COVID-FE/src/school.html";
+    // var rootURL = "file:///C:/Users/ondre/code/CPS-COVID/CPS-COVID-FE/src/school.html";
     window.location.href = rootURL + schoolURL;
 }
 
 //would like to eventually use actual chicago outline instead of coordinate box. 
 // var chiLayer = new L.GeoJSON.AJAX("./data/Chicago.geojson");
 // chiLayer.addTo(mymap);
-
-// function to set a given theme/color-scheme
-function setTheme(themeName) {
-    localStorage.setItem('theme', themeName);
-    document.documentElement.className = themeName;
-}
-// function to toggle between light and dark theme
-function toggleTheme() {
-   if (localStorage.getItem('theme') === 'theme-dark'){
-        Light.addTo(mymap);
-        setTheme('theme-light');
-   } else {
-       setTheme('theme-dark');
-       Dark.addTo(mymap);
-   }
-}
-// Immediately invoked function to set the theme on initial load
-(function () {
-   if (localStorage.getItem('theme') === 'theme-dark') {
-       setTheme('theme-dark');
-       Dark.addTo(mymap);
-   } else {
-       setTheme('theme-light');
-       Light.addTo(mymap);
-   }
-})();
