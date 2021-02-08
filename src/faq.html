@@ -1,52 +1,70 @@
 <!DOCTYPE html>
 <html lang="en" class="theme-light">
-<meta charset="utf-8">
 
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CPS Covid Tracker - FAQ</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous"> 
+
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="container-fluid">
-    <div align="center" class="row">
-        <header>
-            <br>
-            <h1>Chicago Public Schools* COVID-19 Case Tracker</h1>
-            <h5>Currently a work in progress..</h5>
-        </header>
-    </div>
+<body class="max-w-4xl mx-auto bg-blue-50">
+    <header class="max-w-4xl mx-auto bg-blue-300 rounded text-center">
+        <h1 class="text-4xl font-bold mt-5 mb-5">Chicago Public Schools* COVID-19 Case Tracker</h1>
+        <h2 class="text-2xl font-bold mt-5 mb-5">FAQ</h2>    
+    </header>
 
-    <div class="row">
-        <div class="col-sm-2">
-            <form action = "./index.html">
-                <input type="submit" value="Back Home" />
-            </form>
-        </div>
-        <div class="col-sm-9">
-            <h1>FAQ</h1>
-            <p class="faq-question">Q. Where do you get your data from?</p>
-            <p class="faq-answer">A. I get my data from CPS. The webpage with their summary is <a href="https://www.cps.edu/school-reopening-2020/">here</a> and the data is <a href="https://docs.google.com/spreadsheets/d/1dMtr8hhhKjPyyNg7i6V52iMQXEqa67E9iAmECeOqZ6c">here</a>.</p>
-            <p class="faq-question">Q. How often does your data get updated?</p>
-            <p class="faq-answer">A. This site automatically collects updated data from CPS every every night (including holidays and weekends) at midnight.</p>
-            <p class="faq-question">Q. Why are there some days with 0 cases?</p>
-            <p class="faq-answer">A. If CPS has not made any changes to their data at that time, new case numbers for that day will be 0.</p>
-            <p class="faq-question">Q. How long does it take between a case being reported to CPS and it showing up here?</p>
-            <p class="faq-answer">A. Based on what I have seen, it has historically taken about 2 days between a case being reported to CPS, it being investigated, deciding it is "actionable," informing relevant parties, and it showing up in their daily numbers.</p>
-            <p class="faq-question">Q. I was told by my school that there was a case and it has not shown up here!</p>
-            <p class="faq-answer">A. CPS <em>should</em> be letting potenitally exposed schools and pods about exposures before the rest of the world. However, if you are informed of a case in your school and do not see it here within a day or so, please let me know!</p>
-            <p class="faq-question">Q. Why are there days where there are no cases and then a lot of cases?</p>
-            <p class="faq-answer">A. I only update when CPS does. If it takes CPS three extra days to update their data, it might be three days worth of data.</p>
-            <p class="faq-question">Q. Can I report a case to you directly?</p>
-            <p class="faq-answer">A. Heavens no!  Please report directly to CPS by using their (not very easy to find) self-report form <a href="https://chicagopsprod.service-now.com/health?id=cps_self_report">here</a>.</p>
-
+    <div class="grid grid-cols-5 grid-rows-5 gap-2 mb-2">
+        <div class="col-start-1 row-start-1">
+            <button class="text-white font-bold bg-blue-700 hover:bg-blue-800 py-2 px-4 rounded" onclick="location.href='./index.html'">
+                Back Home
+            </button>
         </div>
 
+        <div class="col-start-2 col-span-4 row-start-1 row-span-5">
+            <div class="grid grid-cols-1 grid-rows-7 gap-2">
+                <div class="bg-blue-200 rounded">
+                    <p class="faq-question">Q. Where do you get your data from?</p>
+                    <p class="faq-answer">A. I get my data from CPS. The webpage with their summary is <a href="https://www.cps.edu/school-reopening-2020/">here</a> and the data is <a href="https://docs.google.com/spreadsheets/d/1dMtr8hhhKjPyyNg7i6V52iMQXEqa67E9iAmECeOqZ6c">here</a>.</p>
+                </div>
+                <div class="bg-blue-100 rounded">
+                    <p class="faq-question">Q. How often does your data get updated?</p>
+                    <p class="faq-answer">A. This site automatically collects updated data from CPS every every night (including holidays and weekends) at midnight.</p>
+                </div>
+                <div class="bg-blue-200 rounded">
+                    <p class="faq-question">Q. Why are there some days with 0 cases?</p>
+                    <p class="faq-answer">A. If CPS has not made any changes to their data at that time, new case numbers for that day will be 0.</p>
+                </div>
+                <div class="bg-blue-100 rounded">
+                    <p class="faq-question">Q. How long does it take between a case being reported to CPS and it showing up here?</p>
+                    <p class="faq-answer">A. Based on what I have seen, it has historically taken about 2 days between a case being reported to CPS, it being investigated, deciding it is "actionable," informing relevant parties, and it showing up in their daily numbers.</p>
+                </div>
+                <div class="bg-blue-200 rounded">
+                    <p class="faq-question">Q. I was told by my school that there was a case and it has not shown up here!</p>
+                    <p class="faq-answer">A. CPS <em>should</em> be letting potenitally exposed schools and pods about exposures before the rest of the world. However, if you are informed of a case in your school and do not see it here within a day or so, please let me know!</p>
+                </div>
+                <div class="bg-blue-100 rounded">
+                    <p class="faq-question">Q. Why are there days where there are no cases and then a lot of cases?</p>
+                    <p class="faq-answer">A. I only update when CPS does. If it takes CPS three extra days to update their data, it might be three days worth of data.</p>
+                </div>
+                <div class="bg-blue-200 rounded">
+                    <p class="faq-question">Q. Why are there days where there are no cases and then a lot of cases?</p>
+                    <p class="faq-answer">A. I only update when CPS does. If it takes CPS three extra days to update their data, it might be three days worth of data.</p>
+                </div>
+                <div class="bg-blue-100 rounded">
+                    <p class="faq-question">Q. Can I report a case to you directly?</p>
+                    <p class="faq-answer">A. Heavens no!  Please report directly to CPS by using their (not very easy to find) self-report form <a href="https://chicagopsprod.service-now.com/health?id=cps_self_report">here</a>.</p>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="row">
+
+    <div class="bg-blue-300 rounded py-2 px-2">
         <p>*This site and its creator are neither affiliated nor claim affiliation with the Chicago Public School District.</p>
-        <p>The data used to power this dashboard is publicly available and can be found <a href="https://www.cps.edu/school-reopening-2020/">here</a>.</p>
-        <p align="right">Created with &hearts;. <a href="https://jakobondrey.com">jakobondrey.com</a></p>
+        <p>The data used to power this dashboard is publicly available and can be found <a class="font-semibold text-blue-800" href="https://www.cps.edu/school-reopening-2020/">here</a>.</p>
+        <p align="right">Created with &hearts;. <a class="font-semibold text-blue-800" href="https://jakobondrey.com"> jakobondrey.com</a></p>
     </div>
 
 </body>

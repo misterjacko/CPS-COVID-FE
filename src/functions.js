@@ -100,7 +100,7 @@ var Light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}
 	maxZoom: 19
 }).addTo(mymap);
 
-var AllDataurl = "https://s3.amazonaws.com/cpscovid.com/data/allCpsCovidData.csv"
+var AllDataurl = "./data/allCpsCovidData.csv"
 var data = Papa.parse(AllDataurl, {
     download: true,
     header: true, 
@@ -114,17 +114,22 @@ var data = Papa.parse(AllDataurl, {
         for (var i in results.data) {
             var row = results.data[i];
 
-            var schoolH = row.School.replaceAll(" ", "-");
+            var schoolH = row.School.replaceAll(" ", "_");
             var linkstring = "?name="+schoolH+"&Lat="+row.Latitude+"&Long="+row.Longitude;
             var schoolObj = {School: row.School, SchoolURL: linkstring};
             dropdownList.push(schoolObj);
 
-            var rootURL = "https://cpscovid.com/school.html";
+            // var rootURL = "https://cpscovid.com/school.html";
             // var rootURL = "file:///C:/Users/ondre/code/CPS-COVID/CPS-COVID-FE/src/school.html";
-            var popupStr = '<a href="' + rootURL + linkstring + '">' + row.School + '</a>: <br> Cases this Quarter:' + row["Q2 SY21"];
+            var rootURL = "./school.html";
+
+            var popupStr = '<a href="' + rootURL + linkstring + '">' + row.School + '</a>: <br>';
+            popupStr += 'Total Cases:' + row["gTotal"] + '<br>';
+            //popupStr += 'Past 7 Day\'s Cases:' + row["7Total"] + '<br>';
+            //popupStr += 'Past 14 Day\'s Cases:' + row["14Total"] + '<br>';
             var marker = L.marker([row.Latitude, row.Longitude], {
                 title: row.School,
-                icon: dot(row["Q2 SY21"])
+                icon: dot(row["gTotal"])
             }).bindPopup(popupStr);
             marker.addTo(mymap);
             
@@ -143,8 +148,10 @@ var data = Papa.parse(AllDataurl, {
 
 function gotoSchool(){
     var schoolURL = document.getElementById("schoolBox").value;
-    var rootURL = "https://cpscovid.com/school.html";
+    // var rootURL = "https://cpscovid.com/school.html";
     // var rootURL = "file:///C:/Users/ondre/code/CPS-COVID/CPS-COVID-FE/src/school.html";
+    var rootURL = "./school.html";
+
     window.location.href = rootURL + schoolURL;
 }
 

@@ -1,4 +1,4 @@
-// set the dimensions and margins of the graph
+// Total Cases
 var margin = {top: 30, right: 60, bottom: 50, left: 60},
     width = 500 - margin.left - margin.right,
     height = 200 - margin.top - margin.bottom;
@@ -10,6 +10,18 @@ var totalCase = d3.select("#totalCasesViz")
         .attr("viewBox", "0 0 500 200")
     .append("g")
         .attr("transform","translate(" + margin.left + "," + margin.top + ")");
+
+// Daily cases
+var dailyMargin = {top: 30, right: 60, bottom: 50, left: 60},
+    dailyWidth = 500 - dailyMargin.left - dailyMargin.right,
+    dailyHeight = 200 - dailyMargin.top - dailyMargin.bottom;
+// append the svg object to the body of the page
+var dailyCase = d3.select("#dailyCasesViz")
+    .append("svg")
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", "0 0 500 200")
+    .append("g")
+        .attr("transform","translate(" + dailyMargin.left + "," + dailyMargin.top + ")");
 
 //Read the data
 d3.csv("./data/CPStotals.csv",
@@ -72,43 +84,13 @@ d3.csv("./data/CPStotals.csv",
         totalCase.append("path")
             .datum(data)
             .attr("fill", "none")
-            .attr("stroke", "green")
+            .attr("stroke", "red")
             .attr("stroke-width", 1.5)
             .attr("d", d3.line()
             .x(function(d) { return x(d.date) })
             .y(function(d) { return y(d.running) })
             )
-    }
-);
-/// Daily cases
-var dailyMargin = {top: 30, right: 60, bottom: 50, left: 60},
-    dailyWidth = 500 - dailyMargin.left - dailyMargin.right,
-    dailyHeight = 200 - dailyMargin.top - dailyMargin.bottom;
-// append the svg object to the body of the page
-var dailyCase = d3.select("#dailyCasesViz")
-    .append("svg")
-        .attr("preserveAspectRatio", "xMinYMin meet")
-        .attr("viewBox", "0 0 500 200")
-    .append("g")
-        .attr("transform","translate(" + dailyMargin.left + "," + dailyMargin.top + ")");
 
-//Read the data
-d3.csv("./data/CPStotals.csv",
-    //  format variables:
-    function(d){
-        return { 
-            date : d3.timeParse("%Y%m%d")(d.date),
-            running : d.running,
-            daily : d.daily
-        }
-    },
-    function(data) {
-        var newdata = [];
-        //skips the first "day" which is an accumulation of all previous cases
-        for (i = 1; i < data.length; i++) {
-            newdata.push(data[i]);
-        };
-        data = newdata;
         // Add Title
         dailyCase.append("text")
             .attr("x", (dailyWidth / 2))             
@@ -143,7 +125,7 @@ d3.csv("./data/CPStotals.csv",
             .call(d3.axisLeft(yLeft)
             .ticks(5));    
         dailyCase.append("g")
-            .attr("transform", "translate(381,0)")
+            .attr("transform", "translate(376,0)")
             .call(d3.axisRight(yLeft)
             .ticks(5));    
         // text label for the yLeft axis
@@ -163,7 +145,7 @@ d3.csv("./data/CPStotals.csv",
             .attr("class", "bar")
             .attr("x", function(d) { return x(d.date); })
             .attr("y", function(d) { return yLeft(d.daily); })
-            .attr("width", 5)
+            .attr("width", 1)
             .attr("height", function(d) { return dailyHeight - yLeft(d.daily); });
     }
 );

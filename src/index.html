@@ -18,8 +18,8 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="max-w-4xl mx-auto bg-red-100">
-    <header class="max-w-4xl mx-auto bg-red-300 rounded"></headerclass>
+<body class="max-w-4xl mx-auto bg-blue-50">
+    <header class="max-w-4xl mx-auto bg-blue-300 rounded">
         <h1 class="text-4xl font-bold mt-5 mb-5 text-center">Chicago Public Schools* COVID-19 Case Tracker</h1>
         <div align="center">   
             <select align="center" id="schoolBox" onchange="gotoSchool();">
@@ -32,37 +32,38 @@
         <div id="totalCasesViz"></div>
         <div id="dailyCasesViz"></div>
     </div>
-    <div class="grid grid-cols-8 grid-rows-4 gap-4 mb-2">
+    <div class="grid grid-cols-4 grid-rows-5 gap-2 mb-2">
         
-        <div class="col-start-1 col-span-2 row-start-1 row-span-1 bg-red-200 gap-4 rounded">
-            <div class="px-2 py-2 space-y-3">
-                <button class="text-white font-bold bg-red-700 hover:bg-red-800 py-2 px-4 rounded" id="getLocation" onclick="getLocation();">
+        <div class="col-start-1 col-span-1 row-start-1 row-span-1 gap-2 rounded place-items-stretch">
+            <div class="grid grid-cols-1 grid-rows-2 px-2 py-2 space-y-2 place-items-center">
+                <button class="text-white font-bold bg-blue-700 hover:bg-blue-800 py-2 px-4 rounded" id="getLocation" onclick="getLocation();">
                     Share Location
                 </button>
-                <button class="text-white font-bold bg-red-700 hover:bg-red-800 py-2 px-4 rounded" onclick="location.href='./index.html'">
+                <button class="text-white font-bold bg-blue-700 hover:bg-blue-800 py-2 px-4 rounded" onclick="location.href='./index.html'">
                     Back Home
                 </button>
             </div>  
         </div>
 
-        <div class="col-start-1 col-span-2 row-start-2 row-span-3px-2 py-2 bg-red-300 gap-4 rounded">
-            <p>Read about CPS reopening plans <a href="https://www.cps.edu/school-reopening-2020/">here</a>.</p>
-            <p>Please help keep Chicago safe!</p>
-            <p>Self Report <a href="https://chicagopsprod.service-now.com/health?id=cps_self_report">HERE</a>.<br> 
-            <em>Note:</em> Parents or guardians report on behalf of their own children. CPS Contact tracing Team does not accept or act on second hand reports, speculation, assumptions, or rumors. </p>
+        <div class="col-start-1 col-span-1 row-start-2 row-span-3 bg-blue-300 rounded">
+            <div class="grid grid-cols-1 grid-rows-5 px-2 py-2">
+                <p class="row-start-1 px-2 py-2 rounded">Read about CPS reopening plans <a class="font-semibold text-blue-800" href="https://www.cps.edu/school-reopening-2020/">HERE</a>.</p>
+                <p class="row-start-2 px-2 py-2 rounded">Please help keep Chicago safe!</p>
+                <p class="row-start-3 row-span-3 px-2 py-2 rounded">Self Report <a class="font-semibold text-blue-800" href="https://chicagopsprod.service-now.com/health?id=cps_self_report">HERE</a>.<br>
+                <em>Note:</em> Parents or guardians report on behalf of their own children. CPS Contact tracing Team does not accept or act on second hand reports, speculation, assumptions, or rumors. </p>    
+            </div>
         </div>
 
-        <div class="col-start-1 col-span-2 row-start-5 row-span-1 px-2 py-2">
-            <a href="./faq.html">FAQ</a>
+        <div align="center" class="col-start-1 col-span-1 row-start-5 row-span-1 px-2 py-2 rounded">
+                Read the <a class="font-semibold text-blue-800" href="./faq.html">FAQ</a>
         </div>
-            
-              
-        <div class="col-start-3 col-span-6 row-start-1 row-span-8 rounded" id="mapid"></div>
+                  
+        <div class="col-start-2 col-span-3 row-start-1 row-span-5 rounded" id="mapid"></div>
     </div>    
-    <div class="bg-white rounded py-2 px-2">
+    <div class="bg-blue-300 rounded py-2 px-2">
         <p>*This site and its creator are neither affiliated nor claim affiliation with the Chicago Public School District.</p>
-        <p>The data used to power this dashboard is publicly available and can be found <a href="https://www.cps.edu/school-reopening-2020/">here</a>.</p>
-        <p align="right">Created with &hearts;. <a href="https://jakobondrey.com">jakobondrey.com</a></p>
+        <p>The data used to power this dashboard is publicly available and can be found <a class="font-semibold text-blue-800" href="https://www.cps.edu/school-reopening-2020/">here</a>.</p>
+        <p align="right">Created with &hearts;. <a class="font-semibold text-blue-800" href="https://jakobondrey.com"> jakobondrey.com</a></p>
     </div>
         
     <script type="text/javascript" src="indexgraphs.js"></script>

@@ -1,12 +1,12 @@
 function processSchool(){
     var parameters = location.search.substring(1).split("&");
     var temp = parameters[0].split("=");
-    var schoolName =  temp[1].replaceAll("-", " ");
+    var schoolName =  temp[1].replaceAll("_", " ");
     getDailyTotals(schoolName);
     return schoolName;
 }
 
-// set the dimensions and margins of the graph
+// total Cases
 var margin = {top: 30, right: 60, bottom: 50, left: 60},
     width = 500 - margin.left - margin.right,
     height = 200 - margin.top - margin.bottom;
@@ -14,8 +14,8 @@ var margin = {top: 30, right: 60, bottom: 50, left: 60},
 // append the svg object to the body of the page
 var totalCase = d3.select("#totalCasesViz")
     .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+    .attr("preserveAspectRatio", "xMinYMin meet")
+    .attr("viewBox", "0 0 500 200")
     .append("g")
         .attr("transform","translate(" + margin.left + "," + margin.top + ")");
 
@@ -26,8 +26,8 @@ var dailyMargin = {top: 30, right: 60, bottom: 50, left: 60},
 // append the svg object to the body of the page
 var dailyCase = d3.select("#dailyCasesViz")
     .append("svg")
-        .attr("width", dailyWidth + dailyMargin.left + dailyMargin.right)
-        .attr("height", dailyHeight + dailyMargin.top + dailyMargin.bottom)
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", "0 0 500 200")
     .append("g")
         .attr("transform","translate(" + dailyMargin.left + "," + dailyMargin.top + ")");
 
@@ -86,15 +86,11 @@ function getDailyTotals(schoolName) {
             totalCase.append("path")
                 .datum(dailyTotals)
                 .attr("fill", "none")
-                .attr("stroke", "green")
+                .attr("stroke", "red")
                 .attr("stroke-width", 1.5)
                 .attr("d", d3.line()
                 .x(function(d) { return x(d.date) })
-                .y(function(d) { return y(d.total) }))
-                
-            //remove first day of cases because it is misleading in this graph
-            dailyTotals.length = (dailyTotals.length -1);
-            
+                .y(function(d) { return y(d.total) }))        
 
             // Add Title
             dailyCase.append("text")
@@ -130,7 +126,7 @@ function getDailyTotals(schoolName) {
                 .call(d3.axisLeft(yLeft)
                 .ticks(5));    
             dailyCase.append("g")
-                .attr("transform", "translate(381,0)")
+                .attr("transform", "translate(376,0)")
                 .call(d3.axisRight(yLeft).ticks(5));    
             // text label for the yLeft axis
             dailyCase.append("text")
@@ -153,6 +149,5 @@ function getDailyTotals(schoolName) {
                 .attr("height", function(d) { return dailyHeight - yLeft(d.cases); });
         }
     )
-    
 };
 var schoolName = processSchool();
