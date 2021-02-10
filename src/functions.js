@@ -125,8 +125,8 @@ var data = Papa.parse(AllDataurl, {
 
             var popupStr = '<a href="' + rootURL + linkstring + '">' + row.School + '</a>: <br>';
             popupStr += 'Total Cases:' + row["gTotal"] + '<br>';
-            //popupStr += 'Past 7 Day\'s Cases:' + row["7Total"] + '<br>';
-            //popupStr += 'Past 14 Day\'s Cases:' + row["14Total"] + '<br>';
+            popupStr += 'Past 7 Day\'s Cases:' + row["7Total"] + '<br>';
+            popupStr += 'Past 14 Day\'s Cases:' + row["14Total"] + '<br>';
             var marker = L.marker([row.Latitude, row.Longitude], {
                 title: row.School,
                 icon: dot(row["gTotal"])

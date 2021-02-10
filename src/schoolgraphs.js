@@ -35,8 +35,8 @@ function getDailyTotals(schoolName) {
     d3.csv("./data/newFormatTest.csv",
         function(data) {            
             var dailyTotals = [];
-            var total = parseInt(data[8][schoolName], 10);
-            for (var i = data.length -1; i >= 9; i--) {
+            var total = parseInt(data[5][schoolName], 10);
+            for (var i = data.length -1; i > 5; i--) {
                 var date = d3.timeParse("%Y%m%d")(data[i].School);
                 cases = data[i][schoolName];
                 dailyTotals.push({"date": date, "cases": cases, "total": total});

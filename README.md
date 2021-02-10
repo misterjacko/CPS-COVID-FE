@@ -18,12 +18,11 @@ The site is hosted on [S3](https://aws.amazon.com/s3/) as a static site with [Cl
 
 ## Known issues/technical debt
 - Because the data layer is a csv file, care needs to be taken as to the load put on client devices to download that file and the parsing that needs to happen to display the data. As the data-set grows, client load considerations may need to be revisited.
-- I am not happy with my CSS. I plan to change form Bootstrap to Tailwind. Just gotta learn it first.
 - Cloudfront CDN cacheing needs to be adjusted so that fresh data is always served. 
 
 
 ## TODO
-- More informative popouts ie. School histogram containing running 7 or 14 day averages, weekly summaries etc.
+- More informative popouts ie. School containing running 7 or 14 day averages/totals, weekly summaries etc.
 - make dots bigger as you zoom in
 - clean up css
 
