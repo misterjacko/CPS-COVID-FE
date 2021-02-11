@@ -23,8 +23,11 @@ The site is hosted on [S3](https://aws.amazon.com/s3/) as a static site with [Cl
 
 ## TODO
 - More informative popouts ie. School containing running 7 or 14 day averages/totals, weekly summaries etc.
-- make dots bigger as you zoom in
-- clean up css
+- Make dots bigger as you zoom in
+- Dark mode
+- Better geofencing
+- Is there a way to get around iOS godawful dropdown menu?
+- selector for showing only 7 or 14 day case data on map (dot size) or in the school bar graphs. 
 
 
 ## Contact
@@ -36,9 +39,7 @@ The site is hosted on [S3](https://aws.amazon.com/s3/) as a static site with [Cl
 ## Credits and references
 
 1. [CPS Dataset](https://www.cps.edu/school-reopening-2020/)
-    -   [-Data-](https://docs.google.com/spreadsheets/d/1dMtr8hhhKjPyyNg7i6V52iMQXEqa67E9iAmECeOqZ6c)
 2. [School Loaction Dataset](https://catalog.data.gov/organization/86c0c3d9-3826-47ab-a773-6924b858dd04?groups=local&tags=cps) 
-    - [-Data-](https://data.cityofchicago.org/api/views/d2h8-2upd/rows.csv?accessType=DOWNLOAD)
 3. [Papa Parse](https://www.papaparse.com/)
 4. [Leaflet](https://leafletjs.com/)
 5. [d3js](https://d3js.org/)
