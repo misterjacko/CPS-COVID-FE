@@ -1,5 +1,6 @@
 //set default map view
 var mymap;
+// var myRenderer = L.canvas({ padding: 0.5, tolerance: 20 });
 
 function setMapView(lat, long, zoom) {
 return L.map('mapid').setView([lat, long], zoom);
@@ -129,7 +130,8 @@ var data = Papa.parse(AllDataurl, {
             popupStr += 'Past 14 Day\'s Cases:' + row["14Total"] + '<br>';
             var marker = L.marker([row.Latitude, row.Longitude], {
                 title: row.School,
-                icon: dot(row["gTotal"])
+                icon: dot(row["gTotal"])//,
+                //renderer: myRenderer
             }).bindPopup(popupStr);
             marker.addTo(mymap);
             
