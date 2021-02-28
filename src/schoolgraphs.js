@@ -31,6 +31,10 @@ var dailyCase = d3.select("#dailyCasesViz")
     .append("g")
         .attr("transform","translate(" + dailyMargin.left + "," + dailyMargin.top + ")");
 
+var lastCaseReported = d3.select("#lastCaseReported");
+var total7Day = d3.select("#total7Day");
+var total14Day = d3.select("#total14Day");
+
 function getDailyTotals(schoolName) {
     d3.csv("./data/newFormatTest.csv",
         function(data) {            
@@ -42,6 +46,53 @@ function getDailyTotals(schoolName) {
                 dailyTotals.push({"date": date, "cases": cases, "total": total});
                 total -= cases;
             };
+
+            // add school summary data:
+            var formatDate = d3.timeFormat("%a %b %-d");
+            //Last Reported Cases
+            var lastCaseReportedDate = "";
+            var lastCaseReportedNumber = 0;
+            for (var i = 0; i <= dailyTotals.length -1; i++) {
+                if (dailyTotals[i].cases > 0){
+                    lastCaseReportedDate = formatDate(dailyTotals[i].date);
+                    lastCaseReportedNumber = dailyTotals[i].cases;
+                    break;
+                };
+            };
+            if (lastCaseReportedNumber == 1){
+                lastCaseReported.append("text")
+                .text("Last case (" + lastCaseReportedNumber + ") disclosed " + lastCaseReportedDate)
+            } else if (lastCaseReportedNumber > 1) {
+                lastCaseReported.append("text")
+                .text("Last cases (" + lastCaseReportedNumber + ") disclosed " + lastCaseReportedDate)
+            } else {
+                lastCaseReported.append("text")
+                .text("0 cases have been disclosed")
+            }
+            // 7 day total
+            var total7 = parseInt(data[3][schoolName], 10);
+            if (total7 == 1){
+                total7Day.append("text")
+                .text(total7 + " case in the last 7 days")
+            } else if (total7 > 1) {
+                total7Day.append("text")
+                .text(total7 + " cases in the last 7 days")
+            } else {
+                total7Day.append("text")
+                .text("0 cases in the last 7 days")
+            }
+            // 14 day total
+            var total14 = parseInt(data[4][schoolName], 10);
+            if (total14 == 1){
+                total14Day.append("text")
+                .text(total14 + " case in the last 14 days")
+            } else if (total14 > 1) {
+                total14Day.append("text")
+                .text(total14 + " cases in the last 14 days")
+            } else {
+                total14Day.append("text")
+                .text("0 cases in the last 14 days")
+            }
 
             // Add Title
             totalCase.append("text")
@@ -145,7 +196,7 @@ function getDailyTotals(schoolName) {
                 .attr("class", "bar")
                 .attr("x", function(d) { return x(d.date); })
                 .attr("y", function(d) { return yLeft(d.cases); })
-                .attr("width", 5)
+                .attr("width", 1)
                 .attr("height", function(d) { return dailyHeight - yLeft(d.cases); });
         }
     )

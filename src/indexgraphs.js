@@ -23,14 +23,19 @@ var dailyCase = d3.select("#dailyCasesViz")
     .append("g")
         .attr("transform","translate(" + dailyMargin.left + "," + dailyMargin.top + ")");
 
+var newToday = d3.select("#newToday");
+var lastCPSUpdate = d3.select("#lastCPSUpdate");
+var Average7Days = d3.select("#Average7Day");
+
 //Read the data
 d3.csv("./data/CPStotals.csv",
     // format variables:
     function(d){
         return { 
             date : d3.timeParse("%Y%m%d")(d.date),
-            running : d.running,
-            daily : d.daily
+            running : +d.running,
+            daily : +d.daily,
+            Avg7Day : +d["7DayAvg"]
         }
     },
     function(data) {
@@ -45,7 +50,45 @@ d3.csv("./data/CPStotals.csv",
                 .attr("dx", "-.8em")
                 .attr("dy", ".15em")
                 .attr("transform", "rotate(-65)");
-            
+
+        // add district summary data:
+        var formatDate = d3.timeFormat("%a %b %-d");
+        // Yesterday's cases 
+
+        yesterdayCases = data[data.length - 1].daily;
+        yesterdayDate = data[data.length - 1].date;
+        newToday.append("text")
+            .text(yesterdayCases + " cases disclosed " + formatDate(yesterdayDate))
+        
+        // Last CPS Update
+        var lastUpdateDate;
+        for (var i = data.length -1; i>5; i--){
+            if (data[i].daily != 0){
+                lastUpdateDate = data[i].date;
+                break
+            }
+        }
+        lastCPSUpdate.append("text")
+            .text("Last Update from CPS: " + formatDate(lastUpdateDate))
+
+        // 7day Average
+        function trendString(todayAvg, yesterdayAvg){
+            if (todayAvg < yesterdayAvg) {
+                return "(Decreasing)";
+            } else if (todayAvg > yesterdayAvg) {
+                return "(Increasing)";
+            } else {
+                return "(Holding Steady)";
+            }
+        }
+
+        average = data[data.length - 1].Avg7Day;
+        trendMsg = trendString(average, data[data.length - 2].Avg7Day)
+        average = Math.round((average + Number.EPSILON) * 100) / 100;
+
+        
+        Average7Days.append("text")
+            .text("7 Day Average: " + average + " " + trendMsg)
 
         // Add Title
         totalCase.append("text")
