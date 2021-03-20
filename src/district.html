@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-light">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPS Covid Tracker</title>
+    
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"></script>
+    <!-- <script type="text/javascript" src="leaflet.ajax.min.js"></script> -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="max-w-4xl mx-auto bg-blue-100">
+    <header class="max-w-4xl mx-auto bg-blue-300 rounded text-center">
+        <h1 class="text-4xl font-bold mt-5 mb-5">Chicago Public Schools* COVID-19 Case Tracker</h1>
+        <p class="text-2xl font-bold mt-5 mb-5"> District Data</p><br>
+        <div align="center">   
+            <select align="center" id="schoolBox" onchange="gotoSchool();">
+                <option>Select a School</option>
+            </select>
+        </div>
+        <br>     
+    </header>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+        <div id="totalCasesViz"></div>
+        <div id="dailyCasesViz"></div>
+    </div>
+    <div class="grid grid-cols-3 grid-rows-1 gap-2 text-center gap-4 mb-2">
+        <div class="bg-blue-300 rounded" id="lastCaseReported"></div>
+        <div class="bg-blue-300 rounded" id="total7Day"></div>
+        <div class="bg-blue-300 rounded" id="total14Day"></div>
+    </div>
+    <div class="grid sm:grid-cols-4 sm:grid-rows-5 grid-cols-1 grid-rows-6 gap-2 mb-2">
+        
+        <div class="col-start-1 col-span-1 row-start-1 row-span-1 gap-2 rounded place-items-stretch">
+            <div class="grid grid-cols-1 grid-rows-2 px-2 py-2 space-y-2 place-items-center">
+                <button class="text-white font-bold bg-blue-700 hover:bg-blue-800 py-2 px-4 rounded" id="getLocation" onclick="getLocation();">
+                    Share Location
+                </button>
+                <button class="text-white font-bold bg-blue-700 hover:bg-blue-800 py-2 px-4 rounded" onclick="location.href='./index.html'">
+                    Back Home
+                </button>
+            </div>  
+        </div>
+
+        <div class="sm:col-start-2 sm:col-span-3 sm:row-start-1 sm:row-span-5 row-span-3 rounded" id="mapid"></div>
+
+        <div class="sm:col-start-1 sm:col-span-1 sm:row-start-2 sm:row-span-4 row-span-2 bg-blue-300 rounded">
+            <div class="grid grid-cols-1 grid-rows-6 px-2 py-2">
+                <p class="row-start-1 px-2 py-2 rounded">Read about CPS reopening plans <a class="font-semibold text-blue-800" href="https://www.cps.edu/school-reopening-2020/">HERE</a>.</p>
+                <p class="row-start-2 px-2 py-2 rounded">Please help keep Chicago safe!</p>
+                <p class="row-start-3 row-span-3 px-2 py-2 rounded">Self Report <a class="font-semibold text-blue-800" href="https://chicagopsprod.service-now.com/health?id=cps_self_report">HERE</a>.<br>
+                <em>Note:</em> Parents or guardians report on behalf of their own children. CPS Contact tracing Team does not accept or act on second hand reports, speculation, assumptions, or rumors. </p>    
+                <p class="row-start-6 row-span-1 px-2 py-2 rounded">Read the <a class="font-semibold text-blue-800" href="./faq.html">FAQ</a></p>
+            </div>
+        </div>
+                 
+    </div>    
+    <div class="bg-blue-300 rounded py-2 px-2">
+        <p>*This site and its creator are neither affiliated nor claim affiliation with the Chicago Public School District.</p>
+        <p>The data used to power this dashboard is publicly available and can be found <a class="font-semibold text-blue-800" href="https://www.cps.edu/school-reopening-2020/">here</a>.</p>
+        <p align="right">Created with &hearts;. <a class="font-semibold text-blue-800" href="https://jakobondrey.com"> jakobondrey.com</a></p>
+    </div>
+        
+    <script type="text/javascript" src="schoolfunctions.js"></script>
+    <script type="text/javascript" src="functions.js"></script>
+    <script type="text/javascript" src="schoolgraphs.js"></script>
+</body>
+</html>
