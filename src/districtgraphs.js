@@ -27,11 +27,6 @@ var newToday = d3.select("#newToday");
 var lastCPSUpdate = d3.select("#lastCPSUpdate");
 var Average7Days = d3.select("#Average7Day");
 
-function setWeek(date){
-    var day = date.getDay(),
-        diff = date.getDate() - day + (day == 0 ? -7:0);
-    return new Date(date.setDate(diff));
-};
 //Read the data
 d3.csv("./data/CPStotals.csv",
     // format variables:
@@ -40,24 +35,17 @@ d3.csv("./data/CPStotals.csv",
             date : d3.timeParse("%Y%m%d")(d.date),
             running : +d.running,
             daily : +d.daily,
-            Avg7Day : +d["7DayAvg"],
-            week : setWeek(d3.timeParse("%Y%m%d")(d.date))
+            Avg7Day : +d["7DayAvg"]
         }
-        
+    
     },
     function(data) {
-        var weeklyTotal = d3.rollups(data, v => d3.sum(v, d => d.daily), d => d.week);
-        
-        for (i in weeklyTotal){
-            if (i==0){
-                weeklyTotal[i].push(weeklyTotal[i][1]);
-            } else {
-                weeklyTotal[i].push(weeklyTotal[i-1][2] + weeklyTotal[i][1])
-            }
-        }
-
-
-        console.log(weeklyTotal);
+        var cutoffDate = new Date();
+        cutoffDate.setDate(cutoffDate.getDate() - 90);
+        console.log (cutoffDate);
+        data = data.filter(function(d) {
+            return d.date > cutoffDate;
+        })
         var x = d3.scaleTime()
             .domain(d3.extent(data, function(d) { return d.date; }))
             .range([ 0, width -5 ]);
@@ -72,8 +60,8 @@ d3.csv("./data/CPStotals.csv",
 
         // add district summary data:
         var formatDate = d3.timeFormat("%a %b %-d");
-
         // Yesterday's cases 
+
         yesterdayCases = data[data.length - 1].daily;
         yesterdayDate = data[data.length - 1].date;
         newToday.append("text")
@@ -116,7 +104,7 @@ d3.csv("./data/CPStotals.csv",
             .attr("text-anchor", "middle")  
             .style("font-size", "16px") 
             .style("text-decoration", "underline")  
-            .text("District Total Cases");
+            .text("District Total Cases (last 90 days)");
 
         // add X lable
         totalCase.append("text")             
@@ -144,13 +132,13 @@ d3.csv("./data/CPStotals.csv",
 
         // cumulative trend line
         totalCase.append("path")
-            .datum(weeklyTotal)
+            .datum(data)
             .attr("fill", "none")
             .attr("stroke", "red")
             .attr("stroke-width", 1.5)
             .attr("d", d3.line()
-            .x(function(d) { return x(d[0]) })
-            .y(function(d) { return y(d[2]) })
+            .x(function(d) { return x(d.date) })
+            .y(function(d) { return y(d.running) })
             )
 
         // Add Title
@@ -160,7 +148,7 @@ d3.csv("./data/CPStotals.csv",
             .attr("text-anchor", "middle")  
             .style("font-size", "16px") 
             .style("text-decoration", "underline")  
-            .text("District Weekly Cases");
+            .text("District Daily Cases (last 90 days)");
 
         // Add X axis --> it is a date format
         var x = d3.scaleTime()
@@ -200,23 +188,14 @@ d3.csv("./data/CPStotals.csv",
             .text("Cases"); 
         
         // Daily case bars
-        // dailyCase.selectAll('.bar')
-        //     .data(data)
-        //     .enter().append("rect")
-        //     .style("fill", "red")
-        //     .attr("class", "bar")
-        //     .attr("x", function(d) { return x(d.date); })
-        //     .attr("y", function(d) { return yLeft(d.daily); })
-        //     .attr("width", 1)
-        //     .attr("height", function(d) { return dailyHeight - yLeft(d.daily); });
         dailyCase.selectAll('.bar')
-            .data(weeklyTotal)
+            .data(data)
             .enter().append("rect")
             .style("fill", "red")
             .attr("class", "bar")
-            .attr("x", function(d) { return x(d[0]); })
-            .attr("y", function(d) { return yLeft(d[1]); })
+            .attr("x", function(d) { return x(d.date); })
+            .attr("y", function(d) { return yLeft(d.daily); })
             .attr("width", 3)
-            .attr("height", function(d) { return dailyHeight - yLeft(d[1]); });
+            .attr("height", function(d) { return dailyHeight - yLeft(d.daily); });
     }
 );
