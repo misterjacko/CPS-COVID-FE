@@ -56,10 +56,17 @@ d3.csv("./data/CPStotals.csv",
             }
         }
 
-
-        console.log(weeklyTotal);
+        // Add Title
+        totalCase.append("text")
+            .attr("x", (width / 2))             
+            .attr("y", 0 - (margin.top / 2))
+            .attr("text-anchor", "middle")  
+            .style("font-size", "16px") 
+            .style("text-decoration", "underline")  
+            .text("District Total Cases");
+        // Add X scale
         var x = d3.scaleTime()
-            .domain(d3.extent(data, function(d) { return d.date; }))
+            .domain(d3.extent(weeklyTotal, function(d) { return d[0]; }))
             .range([ 0, width -5 ]);
         totalCase.append("g")
             .attr("transform", "translate(0," + height + ")")
@@ -70,61 +77,13 @@ d3.csv("./data/CPStotals.csv",
                 .attr("dy", ".15em")
                 .attr("transform", "rotate(-65)");
 
-        // add district summary data:
-        var formatDate = d3.timeFormat("%a %b %-d");
-
-        // Yesterday's cases 
-        yesterdayCases = data[data.length - 1].daily;
-        yesterdayDate = data[data.length - 1].date;
-        newToday.append("text")
-            .text(yesterdayCases + " cases disclosed " + formatDate(yesterdayDate))
-        
-        // Last CPS Update
-        var lastUpdateDate;
-        for (var i = data.length -1; i>5; i--){
-            if (data[i].daily != 0){
-                lastUpdateDate = data[i].date;
-                break
-            }
-        }
-        lastCPSUpdate.append("text")
-            .text("Last Update from CPS: " + formatDate(lastUpdateDate))
-
-        // 7day Average
-        function trendString(todayAvg, yesterdayAvg){
-            if (todayAvg < yesterdayAvg) {
-                return "(Decreasing)";
-            } else if (todayAvg > yesterdayAvg) {
-                return "(Increasing)";
-            } else {
-                return "(Holding Steady)";
-            }
-        }
-
-        average = data[data.length - 1].Avg7Day;
-        trendMsg = trendString(average, data[data.length - 2].Avg7Day)
-        average = Math.round((average + Number.EPSILON) * 100) / 100;
-
-        
-        Average7Days.append("text")
-            .text("7 Day Average: " + average + " " + trendMsg)
-
-        // Add Title
-        totalCase.append("text")
-            .attr("x", (width / 2))             
-            .attr("y", 0 - (margin.top / 2))
-            .attr("text-anchor", "middle")  
-            .style("font-size", "16px") 
-            .style("text-decoration", "underline")  
-            .text("District Total Cases");
-
         // add X lable
         totalCase.append("text")             
             .attr("transform", "translate(" + (width/2) + " ," + (height + margin.top + 20) + ")")
             .style("text-anchor", "middle");
       // Add Y axis
         var y = d3.scaleLinear()
-            .domain([0, (1.3 * d3.max(data, function(d) { return +d.running; }))])
+            .domain([0, (1.3 * d3.max(weeklyTotal, function(d) { return +d[2]; }))])
             .range([ height, 0 ]);
         totalCase.append("g")
             .call(d3.axisLeft(y)
@@ -164,7 +123,7 @@ d3.csv("./data/CPStotals.csv",
 
         // Add X axis --> it is a date format
         var x = d3.scaleTime()
-            .domain(d3.extent(data, function(d) { return d.date; }))
+            .domain(d3.extent(weeklyTotal, function(d) { return d[0]; }))
             .range([ 0, dailyWidth -5 ]);
         dailyCase.append("g")
             .attr("transform", "translate(0," + dailyHeight + ")")
@@ -181,7 +140,7 @@ d3.csv("./data/CPStotals.csv",
 
       // Add Y axis
         var yLeft = d3.scaleLinear()
-            .domain([0, (1.3 * d3.max(data, function(d) { return +d.daily; }))])
+            .domain([0, (1.3 * d3.max(weeklyTotal, function(d) { return +d[1]; }))])
             .range([ dailyHeight, 0 ]);
         dailyCase.append("g")
             .call(d3.axisLeft(yLeft)
@@ -200,15 +159,6 @@ d3.csv("./data/CPStotals.csv",
             .text("Cases"); 
         
         // Daily case bars
-        // dailyCase.selectAll('.bar')
-        //     .data(data)
-        //     .enter().append("rect")
-        //     .style("fill", "red")
-        //     .attr("class", "bar")
-        //     .attr("x", function(d) { return x(d.date); })
-        //     .attr("y", function(d) { return yLeft(d.daily); })
-        //     .attr("width", 1)
-        //     .attr("height", function(d) { return dailyHeight - yLeft(d.daily); });
         dailyCase.selectAll('.bar')
             .data(weeklyTotal)
             .enter().append("rect")
@@ -218,5 +168,45 @@ d3.csv("./data/CPStotals.csv",
             .attr("y", function(d) { return yLeft(d[1]); })
             .attr("width", 3)
             .attr("height", function(d) { return dailyHeight - yLeft(d[1]); });
+
+
+        // add district summary data:
+        var formatDate = d3.timeFormat("%a %b %-d");
+
+        // Yesterday's cases 
+        yesterdayCases = data[data.length - 1].daily;
+        yesterdayDate = data[data.length - 1].date;
+        newToday.append("text")
+            .text(yesterdayCases + " cases disclosed " + formatDate(yesterdayDate))
+        
+        // Last CPS Update
+        var lastUpdateDate;
+        for (var i = data.length -1; i>5; i--){
+            if (data[i].daily != 0){
+                lastUpdateDate = data[i].date;
+                break
+            }
+        }
+        lastCPSUpdate.append("text")
+            .text("Last Update from CPS: " + formatDate(lastUpdateDate))
+
+        // 7day Average
+        function trendString(todayAvg, yesterdayAvg){
+            if (todayAvg < yesterdayAvg) {
+                return "(Decreasing)";
+            } else if (todayAvg > yesterdayAvg) {
+                return "(Increasing)";
+            } else {
+                return "(Holding Steady)";
+            }
+        }
+
+        average = data[data.length - 1].Avg7Day;
+        trendMsg = trendString(average, data[data.length - 2].Avg7Day)
+        average = Math.round((average + Number.EPSILON) * 100) / 100;
+
+        
+        Average7Days.append("text")
+            .text("7 Day Average: " + average + " " + trendMsg)
     }
 );
