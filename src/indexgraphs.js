@@ -191,22 +191,22 @@ d3.csv("./data/CPStotals.csv",
             .text("Last Update from CPS: " + formatDate(lastUpdateDate))
 
         // 7day Average
-        function trendString(todayAvg, yesterdayAvg){
-            if (todayAvg < yesterdayAvg) {
-                return "(Decreasing)";
-            } else if (todayAvg > yesterdayAvg) {
-                return "(Increasing)";
-            } else {
-                return "(Holding Steady)";
-            }
-        }
+        // function trendString(todayAvg, yesterdayAvg){
+        //     if (todayAvg < yesterdayAvg) {
+        //         return "(Decreasing)";
+        //     } else if (todayAvg > yesterdayAvg) {
+        //         return "(Increasing)";
+        //     } else {
+        //         return "(Holding Steady)";
+        //     }
+        // }
 
         average = data[data.length - 1].Avg7Day;
-        trendMsg = trendString(average, data[data.length - 2].Avg7Day)
+        // trendMsg = trendString(average, data[data.length - 2].Avg7Day)
         average = Math.round((average + Number.EPSILON) * 100) / 100;
 
         
         Average7Days.append("text")
-            .text("7 Day Average: " + average + " " + trendMsg)
+            .text("7 Day Average: " + average)
     }
 );
