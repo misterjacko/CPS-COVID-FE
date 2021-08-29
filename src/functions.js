@@ -28,7 +28,11 @@ if (location.search.substring(1) != "") {
     makeACircle(lat,long);
     // find school location. 
 } else {
- mymap = setMapView(41.8249149, -87.6862769, 10.5);
+ mymap = setMapView(41.847131, -87.691600, 10.5);
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 //attempt to soom in on location and surrounding schools
@@ -49,12 +53,14 @@ function getLocation() {
 function error(err) {
     console.warn(`ERROR(${err.code}): ${err.message}`);
 };
-  
+
 function success(pos) { // need to add logic for if outside of a reasonable boundry (ie from spain)
     var query = pos.coords.latitude + ',' + pos.coords.longitude;
     console.log('coordinates: ' + query);
     if ((41.64147109473022 < pos.coords.latitude < 42.02603353279949) && ((-87.85188495068708 < pos.coords.longitude) && (pos.coords.longitude < -87.5169044489204))) {
         mymap.flyTo([pos.coords.latitude, pos.coords.longitude], 15);
+        sleep(2000).then(() => {refreshMarkers(); });
+
     } else {
         alert('You are not close enough to Chicago. \n Zooming to your location would be pretty pointless.');
     };
@@ -65,19 +71,35 @@ function dot(cases){
     var dotFile = "";
     if (cases == 0){
         dotFile = "./images/dot0.png";
-    } else if (cases <= 1) {
+    } else if (cases == 1) {
         dotFile = "./images/dot1.png";
-    } else if (cases <= 3) {
+    } else if (cases == 2) {
+    // } else if (cases <= 3) {
         dotFile = "./images/dot2.png";
-    } else if (cases <= 10) {
+    } else if (cases == 3) {
+    // } else if (cases <= 10) {
         dotFile = "./images/dot3.png";
-    } else if (cases <= 30) {
+    } else if (cases == 4) {
+    // } else if (cases <= 30) {
         dotFile = "./images/dot4.png";
-    } else if (cases <= 100) {
+    } else if (cases <= 5) {
+    // } else if (cases <= 100) {
         dotFile = "./images/dot5.png";
     };
-    //making the minimum marker size 4
-    cases = (cases + 12) + 1**(Math.sqrt(cases))
+
+    if (mymap.getZoom() <= 10) {
+        zoomMod = 0.7
+    } else if (mymap.getZoom() >= 14) {
+        zoomMod = 1.5
+    } else {
+        zoomMod  = 1
+    }
+    if (cases == 0){
+        cases = (mymap.getZoom() * zoomMod - 6) + 1**(Math.sqrt(cases))
+    } else {
+        cases = (mymap.getZoom() * zoomMod * 1.2) + (cases *3) + 1**(Math.sqrt(cases))
+    }
+    
     dotObj = L.icon({
         iconUrl: dotFile,
         iconSize:     [cases, cases], // size of the icon
@@ -86,6 +108,18 @@ function dot(cases){
     });
     return dotObj;
 };
+var titleLayer = L.control({position: "topright"});
+titleLayer.onAdd = function(){
+    var div = L.DomUtil.create('div', 'myclass');
+    div.innerHTML= "<center>*COVID-19 cases reported <br> in last 14 days<center>";
+    div.style.backgroundColor = "white"
+    div.style.padding = "5px"
+
+    return div;
+}
+titleLayer.addTo(mymap);
+
+
 
 var scaleControlLayer = L.control({position: "topleft"});
 scaleControlLayer.onAdd = function(){
@@ -100,52 +134,82 @@ var Light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}
 	subdomains: 'abcd',
 	maxZoom: 19
 }).addTo(mymap);
-
+var markerLayer = L.layerGroup()
+    // var markers = L.markerClusterGroup()
 var AllDataurl = "./data/allCpsCovidData.csv"
-var data = Papa.parse(AllDataurl, {
-    download: true,
-    header: true, 
-    skipEmptyLines: true,
-    dynamicTyping: true,
-    transformHeader:function(h) {
-        return h.trim();
-    },
-    complete: function(results) {
-        var dropdownList = [];
-        for (var i in results.data) {
-            var row = results.data[i];
+function drawSchools(){
+    var data = Papa.parse(AllDataurl, {
+        download: true,
+        header: true, 
+        skipEmptyLines: true,
+        dynamicTyping: true,
+        transformHeader:function(h) {
+            return h.trim();
+        },
+        complete: function(results) {
+            var dropdownList = [];
+            for (var i in results.data) {
+                var row = results.data[i];
 
-            var schoolH = row.School.replaceAll(" ", "_");
-            var linkstring = "?name="+schoolH+"&Lat="+row.Latitude+"&Long="+row.Longitude;
-            var schoolObj = {School: row.School, SchoolURL: linkstring};
-            dropdownList.push(schoolObj);
+                var schoolH = row.School.replaceAll(" ", "_");
+                var linkstring = "?name="+schoolH+"&Lat="+row.Latitude+"&Long="+row.Longitude;
+                var schoolObj = {School: row.School, SchoolURL: linkstring};
+                dropdownList.push(schoolObj);
 
-            // var rootURL = "https://cpscovid.com/school.html";
-            // var rootURL = "file:///C:/Users/ondre/code/CPS-COVID/CPS-COVID-FE/src/school.html";
-            var rootURL = "./school.html";
+                // var rootURL = "https://cpscovid.com/school.html";
+                // var rootURL = "file:///C:/Users/ondre/code/CPS-COVID/CPS-COVID-FE/src/school.html";
+                var rootURL = "./school.html";
 
-            var popupStr = '<a href="' + rootURL + linkstring + '">' + row.School + '</a>: <br>';
-            popupStr += 'Total Cases:' + row["gTotal"] + '<br>';
-            popupStr += 'Past 7 Day\'s Cases:' + row["7Total"] + '<br>';
-            popupStr += 'Past 14 Day\'s Cases:' + row["14Total"] + '<br>';
-            var marker = L.marker([row.Latitude, row.Longitude], {
-                title: row.School,
-                icon: dot(row["gTotal"])//,
-                //renderer: myRenderer
-            }).bindPopup(popupStr);
-            marker.addTo(mymap);
-            
-        };
-        var dropDownBox = document.getElementById("schoolBox");
-        for (var i in dropdownList){
-            var schoolObj = dropdownList[i];
-            var el = document.createElement("option");
-            el.textContent = schoolObj.School;
-            el.value = [schoolObj.SchoolURL];
-            dropDownBox.appendChild(el);
+                var popupStr = '<a href="' + rootURL + linkstring + '">' + row.School + '</a>: <br>';
+                popupStr += 'Total Cases:' + row["gTotal"] + '<br>';
+                popupStr += 'Past 7 Day\'s Cases:' + row["7Total"] + '<br>';
+                popupStr += 'Past 14 Day\'s Cases:' + row["14Total"] + '<br>';
+                var marker = L.marker([row.Latitude, row.Longitude], {
+                    title: row.School,
+                    // icon: dot(row["gTotal"])//
+                    icon: dot(row["14Total"])//
+                    //renderer: myRenderer
+                }).bindPopup(popupStr);
+                marker.addTo(markerLayer);
+                // marker.addTo(mymap);
+                
+            };
+            var dropDownBox = document.getElementById("schoolBox");
+            for (var i in dropdownList){
+                var schoolObj = dropdownList[i];
+                var el = document.createElement("option");
+                el.textContent = schoolObj.School;
+                el.value = [schoolObj.SchoolURL];
+                dropDownBox.appendChild(el);
+            }
         }
+        
+    });
+    markerLayer.addTo(mymap)
+}
+
+function refreshMarkers(){
+    markerLayer.clearLayers();
+    drawSchools()
+}
+/*Zoom Control Click Managed*/
+var bZoomControlClick = false;
+mymap.on('zoomend',function(e){
+    if(bZoomControlClick){
+        refreshMarkers()
     }
-    
+    bZoomControlClick = false;
+});     
+
+var element = document.querySelector('a.leaflet-control-zoom-in');
+L.DomEvent.addListener(element, 'click', function (e) {
+    bZoomControlClick = true;
+    $(mymap).trigger("zoomend");
+});
+var element1 = document.querySelector('a.leaflet-control-zoom-out');
+L.DomEvent.addListener(element1, 'click', function (e) {
+    bZoomControlClick = true;
+    $(mymap).trigger("zoomend");
 });
 
 function gotoSchool(){
@@ -156,6 +220,7 @@ function gotoSchool(){
 
     window.location.href = rootURL + schoolURL;
 }
+drawSchools()
 
 //would like to eventually use actual chicago outline instead of coordinate box. 
 // var chiLayer = new L.GeoJSON.AJAX("./data/Chicago.geojson");
