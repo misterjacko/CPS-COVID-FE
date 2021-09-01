@@ -69,7 +69,7 @@ function success(pos) { // need to add logic for if outside of a reasonable boun
 // sets the size of the case dot
 function dot(cases){
     var dotFile = "";
-    if (cases == 0){
+    if (cases <= 0){
         dotFile = "./images/dot0.png";
     } else if (cases == 1) {
         dotFile = "./images/dot1.png";
@@ -82,7 +82,7 @@ function dot(cases){
     } else if (cases == 4) {
     // } else if (cases <= 30) {
         dotFile = "./images/dot4.png";
-    } else if (cases <= 5) {
+    } else if (cases >= 5) {
     // } else if (cases <= 100) {
         dotFile = "./images/dot5.png";
     };
@@ -94,8 +94,8 @@ function dot(cases){
     } else {
         zoomMod  = 1
     }
-    if (cases == 0){
-        cases = (mymap.getZoom() * zoomMod - 6) + 1**(Math.sqrt(cases))
+    if (cases <= 0){
+        cases = (mymap.getZoom() * zoomMod - 6) + 1**(Math.sqrt(0))
     } else {
         cases = (mymap.getZoom() * zoomMod * 1.2) + (cases *3) + 1**(Math.sqrt(cases))
     }
