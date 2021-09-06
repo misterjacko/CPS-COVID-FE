@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-light">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPS Covid Tracker - Subscribe for updates</title>
+
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="max-w-4xl mx-auto bg-blue-100">
+    <header class="max-w-4xl mx-auto bg-blue-300 rounded text-center">
+        <h1 class="text-4xl font-bold mt-5 mb-5">Chicago Public Schools* COVID-19 Case Tracker</h1>
+        <h2 class="text-2xl font-bold mt-5 mb-5">Subscribe for updates</h2>    
+        <h3 class="text-2xl font-bold mt-5 mb-5"></h3>    
+    </header>
+
+    <div class="sm:grid sm:grid-cols-5 sm:grid-rows-5 gap-2 mb-2">
+        <div class="col-start-1 row-start-1">
+            <button class="text-white font-bold bg-blue-700 hover:bg-blue-800 py-2 px-4 rounded" onclick="location.href='./index.html'">
+                Back Home
+            </button>
+        </div>
+
+        <div class="sm:col-start-2 sm:col-span-4 sm:row-start-1 sm:row-span-5">
+            <div class="grid grid-cols-1 grid-rows-7 gap-2">
+                <div class="bg-blue-200 rounded">
+                    <p class="sub-prompt font-bold">Get notified when this site detects new cases are published by CPS</p>
+                    <form method="GET" action="https://ebrw62siqc.execute-api.us-east-1.amazonaws.com/Prod/prod" onsubmit="this.submit(); this.reset(); return false" accept-charset="utf-8" target="sub-response">
+                        <input type="email" id="email" name="email" value="email">
+                        <input type="submit" value="Subscribe">
+                    </form>
+                    
+                    <iframe name="sub-response" style="border:none;" id="sub-response" height="70" width="500"></iframe>
+                    <!-- <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe> -->
+                    <p class="sub-description">If you subscribe you will recieve an email notifying you that there are new cases, 
+                        and a brief summary of cases released (e.g. School <--> #). The email is automatically sent when new numbers 
+                        are dectected. That means that it could be sent multiple times per day if the numbers are updated multiple 
+                        times per day. The numbers could also be negative if CPS deletes case data. Strange behavior is possible while 
+                        I iron out the wrinkles. Each email has an unsubscribe link so you can unsubscribe at any time.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-blue-300 rounded py-2 px-2">
+        <p>*This site and its creator are neither affiliated nor claim affiliation with the Chicago Public School District.</p>
+        <p>The data used to power this dashboard is publicly available and can be found <a class="font-semibold text-blue-800" href="https://www.cps.edu/school-reopening-2020/">here</a>.</p>
+        <p align="right">Created with &hearts;. <a class="font-semibold text-blue-800" href="https://jakobondrey.com"> jakobondrey.com</a></p>
+        <p align="right"><a class="font-semibold text-blue-800" href="https://buymeacoffee.com/misterjacko">Buy me a &#9749;</a></p>
+    </div>
+
+</body>
+</html>
