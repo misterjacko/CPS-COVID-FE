@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CPS Covid Tracker - Subscribe for updates</title>
+    <title>CPS Covid Tracker - Most Recent Update</title>
 
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -13,7 +13,7 @@
 <body class="max-w-4xl mx-auto bg-blue-100">
     <header class="max-w-4xl mx-auto bg-blue-300 rounded text-center">
         <h1 class="text-4xl font-bold mt-5 mb-5">Chicago Public Schools* COVID-19 Case Tracker</h1>
-        <h2 class="text-2xl font-bold mt-5 mb-5">Subscribe for updates</h2>    
+        <h2 class="text-2xl font-bold mt-5 mb-5">Most Recent Update</h2>    
         <h3 class="text-2xl font-bold mt-5 mb-5"></h3>    
     </header>
 
@@ -27,18 +27,9 @@
         <div class="sm:col-start-2 sm:col-span-4 sm:row-start-1 sm:row-span-5">
             <div class="grid grid-cols-1 grid-rows-7 gap-2">
                 <div class="bg-blue-200 rounded">
-                    <p class="sub-prompt font-bold">Get notified when this site detects new cases are published by CPS</p>
-                    <form method="GET" action="https://fxj1oph9i8.execute-api.us-east-1.amazonaws.com/Prod/prod/" accept-charset="utf-8" target="sub-response">
-                        <input type="email" id="email" name="email" value="email@example.com">
-                        <input type="submit" value="Subscribe">
-                    </form>
+                    <p class="sub-prompt font-bold">Newest Cases Released By CPS</p>
                     
-                    <iframe name="sub-response" style="border:none;" id="sub-response" height="70" width="500"></iframe>
-                    <p class="sub-description">If you subscribe you will recieve an email notifying you that there are new cases, 
-                        and a brief summary of cases released (e.g. School <--> #). The email is automatically sent when new numbers 
-                        are dectected. That means that it could be sent multiple times per day if the numbers are updated multiple 
-                        times per day. The numbers could also be negative if CPS deletes case data. Strange behavior is possible while 
-                        I iron out the wrinkles. Each email has an unsubscribe link so you can unsubscribe at any time.</p>
+                    <p class="newCaseData"></p>
                 </div>
             </div>
         </div>
