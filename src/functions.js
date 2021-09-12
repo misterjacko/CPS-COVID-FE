@@ -119,7 +119,16 @@ titleLayer.onAdd = function(){
 }
 titleLayer.addTo(mymap);
 
+var scaleHintLayer = L.control({position: "topleft"});
+scaleHintLayer.onAdd = function(){
+    var div = L.DomUtil.create('div', 'myclass');
+    div.innerHTML= "<center>use +/- to set<br>dots to map scale<center>";
+    div.style.backgroundColor = "white"
+    div.style.padding = "5px"
 
+    return div;
+}
+scaleHintLayer.addTo(mymap);
 
 var scaleControlLayer = L.control({position: "topleft"});
 scaleControlLayer.onAdd = function(){
