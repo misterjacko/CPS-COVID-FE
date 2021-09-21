@@ -39,8 +39,8 @@ function getDailyTotals(schoolName) {
     d3.csv("./data/newFormatTest.csv",
         function(data) {            
             var dailyTotals = [];
-            var total = parseInt(data[5][schoolName], 10);
-            for (var i = data.length -1; i > 5; i--) {
+            var total = parseInt(data[6][schoolName], 10);
+            for (var i = data.length -1; i > 7; i--) {
                 var date = d3.timeParse("%Y%m%d")(data[i].School);
                 cases = data[i][schoolName];
                 dailyTotals.push({"date": date, "cases": cases, "total": total});
@@ -94,6 +94,18 @@ function getDailyTotals(schoolName) {
                 .text("0 cases in the last 14 days")
             }
 
+            // // 21 day total
+            // var total21 = parseInt(data[5][schoolName], 10);
+            // if (total21 == 1){
+            //     total21Day.append("text")
+            //     .text(total21 + " case in the last 21 days")
+            // } else if (total21 > 1) {
+            //     total21Day.append("text")
+            //     .text(total21 + " cases in the last 21 days")
+            // } else {
+            //     total21Day.append("text")
+            //     .text("0 cases in the last 21 days")
+            // }
             // Add Title
             totalCase.append("text")
                 .attr("x", (width / 2))             
