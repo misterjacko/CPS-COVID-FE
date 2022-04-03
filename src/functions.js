@@ -1,5 +1,6 @@
 //set default map view
 var mymap;
+var timeLength = "14Total";
 // var myRenderer = L.canvas({ padding: 0.5, tolerance: 20 });
 
 function setMapView(lat, long, zoom) {
@@ -108,11 +109,50 @@ function dot(cases){
     });
     return dotObj;
 };
+function setDaySpan() {
+    
+    if (timeLength == "7Total") {
+        timeLength = "14Total"
+    } else {
+        timeLength = "7Total"
+    };
+    console.log(timeLength);
+    refreshMarkers()
+    titleLayer.remove();
+    titleLayer.addTo(mymap);
+}
 var titleLayer = L.control({position: "topright"});
 titleLayer.onAdd = function(){
     var div = L.DomUtil.create('div', 'myclass');
-    div.innerHTML= "<center>*COVID-19 cases reported <br> in last 14 days<center>";
-    div.style.backgroundColor = "white"
+    if (timeLength == "14Total") {
+        div.innerHTML= `
+        <center>
+            *COVID-19 cases reported<br>
+            in last 14 days<br>
+            <div class="flex">
+                    <div class="flex-auto  text-white font-bold bg-blue-700 hover:bg-blue-800 rounded p-1 cursor-pointer" onclick="setDaySpan()" id="rangeToggle">
+                    Change to 7 days</div>
+                    <div></div>
+            </div>
+        </center>
+        `;
+    } else {
+        div.innerHTML= `
+        <center>
+            *COVID-19 cases reported<br>
+            in last 7 days<br>
+            <div class="flex">
+                    <div class="flex-auto  text-white font-bold bg-blue-700 hover:bg-blue-800 rounded p-1 cursor-pointer" onclick="setDaySpan()" id="rangeToggle">
+                   Change to 14 days </div>
+                    <div></div>
+            </div>
+        </center>
+        `;
+        
+    };
+
+    // <button onclick='setDaySpan()'>Click</button>
+    // div.style.backgroundColor = "white"
     div.style.padding = "5px"
 
     return div;
@@ -145,8 +185,11 @@ var Light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}
 }).addTo(mymap);
 var markerLayer = L.layerGroup()
     // var markers = L.markerClusterGroup()
-var AllDataurl = "./data/allCpsCovidData.csv"
-function drawSchools(){
+// var AllDataurl = "https://cpscovid.com/data/allCpsCovidDataVax.csv"
+var AllDataurl = "https://cpscovid.com/data/allCpsCovidData.csv"
+// var AllDataurl = "./data/allCpsCovidData.csv"
+function drawSchools(day_span){
+    // var day_span = "7Total"
     var data = Papa.parse(AllDataurl, {
         download: true,
         header: true, 
@@ -163,20 +206,31 @@ function drawSchools(){
                 var schoolH = row.School.replaceAll(" ", "_");
                 var linkstring = "?name="+schoolH+"&Lat="+row.Latitude+"&Long="+row.Longitude;
                 var schoolObj = {School: row.School, SchoolURL: linkstring};
+                if (row.Student_Count!=0){
+                    var vax = Math.round((row.Vax_Complete/row.Student_Count)*1000)/10
+                }
+                
                 dropdownList.push(schoolObj);
 
                 // var rootURL = "https://cpscovid.com/school.html";
-                // var rootURL = "file:///C:/Users/ondre/code/CPS-COVID/CPS-COVID-FE/src/school.html";
+                // var rootURL = "cschool.html";
                 var rootURL = "./school.html";
 
                 var popupStr = '<a href="' + rootURL + linkstring + '">' + row.School + '</a>: <br>';
-                popupStr += 'Total Cases:' + row["gTotal"] + '<br>';
-                popupStr += 'Past 7 Day\'s Cases:' + row["7Total"] + '<br>';
-                popupStr += 'Past 14 Day\'s Cases:' + row["14Total"] + '<br>';
+                popupStr += 'Total Cases: ' + row["gTotal"] + '<br>';
+                popupStr += 'Past 7 Day\'s Cases: ' + row["7Total"] + '<br>';
+                popupStr += 'Past 14 Day\'s Cases: ' + row["14Total"] + '<br>';
+                if (row.Student_Count!=0){
+                    popupStr += 'Students: ' + row.Student_Count+ '<br>';
+                    popupStr += 'Students Vaccinated: ' + vax+ '%<br>';
+                }
+                case_val = row[day_span];
                 var marker = L.marker([row.Latitude, row.Longitude], {
+                    
                     title: row.School,
                     // icon: dot(row["gTotal"])//
-                    icon: dot(row["14Total"])//
+                    icon: dot(case_val)//
+                    // icon: dot(row["14Total"])//
                     //renderer: myRenderer
                 }).bindPopup(popupStr);
                 marker.addTo(markerLayer);
@@ -199,7 +253,7 @@ function drawSchools(){
 
 function refreshMarkers(){
     markerLayer.clearLayers();
-    drawSchools()
+    drawSchools(timeLength)
 }
 /*Zoom Control Click Managed*/
 var bZoomControlClick = false;
@@ -229,7 +283,7 @@ function gotoSchool(){
 
     window.location.href = rootURL + schoolURL;
 }
-drawSchools()
+drawSchools(timeLength)
 
 //would like to eventually use actual chicago outline instead of coordinate box. 
 // var chiLayer = new L.GeoJSON.AJAX("./data/Chicago.geojson");
