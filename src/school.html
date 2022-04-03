@@ -22,6 +22,7 @@
     <header class="max-w-4xl mx-auto bg-blue-300 rounded text-center">
         <h1 class="text-4xl font-bold mt-5 mb-5">Chicago Public Schools* COVID-19 Case Tracker</h1>
         <p id="schoolName"></p><br>
+        <p id="schoolInfo"></p><br>
         <div align="center">   
             <select align="center" id="schoolBox" onchange="gotoSchool();">
                 <option>Select a School</option>
@@ -33,10 +34,11 @@
         <div id="totalCasesViz"></div>
         <div id="dailyCasesViz"></div>
     </div>
-    <div class="grid grid-cols-3 grid-rows-1 gap-2 text-center gap-4 mb-2">
+    <div class="grid grid-cols-4 grid-rows-1 gap-2 text-center gap-4 mb-2">
         <div class="bg-blue-300 rounded" id="lastCaseReported"></div>
-        <div class="bg-blue-300 rounded" id="total7Day"></div>
-        <div class="bg-blue-300 rounded" id="total14Day"></div>
+        <button class="text-white font-bold bg-blue-700 hover:bg-blue-800 py-2 px-4 rounded" onclick="changeSpan(7);" id="total7Day"></button>
+        <button class="text-white font-bold bg-blue-700 hover:bg-blue-800 py-2 px-4 rounded" onclick="changeSpan(14);" id="total14Day"></button>
+        <button class="text-white font-bold bg-blue-700 hover:bg-blue-800 py-2 px-4 rounded" onclick="changeSpan('sy');" id="grandTotal"></button>
     </div>
     <div class="grid sm:grid-cols-4 sm:grid-rows-5 grid-cols-1 grid-rows-6 gap-2 mb-2">
         
@@ -55,11 +57,11 @@
 
         <div class="sm:col-start-1 sm:col-span-1 sm:row-start-2 sm:row-span-4 row-span-2 bg-blue-300 rounded">
             <div class="grid grid-cols-1 grid-rows-6 px-2 py-2">
-                <p class="row-start-1 px-2 py-2 rounded">Read about CPS reopening plans <a class="font-semibold text-blue-800" href="https://www.cps.edu/school-reopening-2020/">HERE</a>.</p>
-                <p class="row-start-2 px-2 py-2 rounded">Please help keep Chicago safe!</p>
-                <p class="row-start-3 row-span-3 px-2 py-2 rounded">Self Report <a class="font-semibold text-blue-800" href="https://chicagopsprod.service-now.com/health?id=cps_self_report">HERE</a>.<br>
-                <em>Note:</em> Parents or guardians report on behalf of their own children. CPS Contact tracing Team does not accept or act on second hand reports, speculation, assumptions, or rumors. </p>    
-                <p class="row-start-6 row-span-1 px-2 py-2 rounded">Read the <a class="font-semibold text-blue-800" href="./faq.html">FAQ</a></p>
+                <!-- <p class="row-start-1 px-2 py-2 rounded">Read about CPS reopening plans <a class="font-semibold text-blue-800" href="https://www.cps.edu/school-reopening-2020/">HERE</a>.</p> -->
+                <!-- <p class="row-start-2 px-2 py-2 rounded">Please help keep Chicago safe!</p> -->
+                <!-- <p class="row-start-3 row-span-3 px-2 py-2 rounded">Self Report <a class="font-semibold text-blue-800" href="https://chicagopsprod.service-now.com/health?id=cps_self_report">HERE</a>.<br> -->
+                <!-- <em>Note:</em> Parents or guardians report on behalf of their own children. CPS Contact tracing Team does not accept or act on second hand reports, speculation, assumptions, or rumors. </p>     -->
+                <p class="row-start-1 row-span-1 px-2 py-2 rounded">Read the <a class="font-semibold text-blue-800" href="./faq.html">FAQ</a></p>
             </div>
         </div>
                  
