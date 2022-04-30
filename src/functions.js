@@ -72,18 +72,18 @@ function dot(cases){
     var dotFile = "";
     if (cases <= 0){
         dotFile = "./images/dot0.png";
-    } else if (cases <= 1) {
+    } else if (cases <= .5) {
         dotFile = "./images/dot1.png";
-    } else if (cases <= 3) {
+    } else if (cases < 1) {
     // } else if (cases <= 3) {
         dotFile = "./images/dot2.png";
-    } else if (cases <= 10) {
+    } else if (cases < 2.5) {
     // } else if (cases <= 10) {
         dotFile = "./images/dot3.png";
-    } else if (cases <= 30) {
-    // } else if (cases <= 30) {
+    } else if (cases < 5) {
+    // // } else if (cases <= 30) {
         dotFile = "./images/dot4.png";
-    } else if (cases > 30) {
+    } else if (cases >= 5) {
     // } else if (cases <= 100) {
         dotFile = "./images/dot5.png";
     };
@@ -98,7 +98,8 @@ function dot(cases){
     if (cases <= 0){
         cases = (mymap.getZoom() * zoomMod - 6) + 1**(Math.sqrt(0))
     } else {
-        cases = (mymap.getZoom() * zoomMod * 1.2) + (cases) + 1**(Math.sqrt(cases))
+        cases = (mymap.getZoom() * zoomMod * 1.2) + ((cases) * (Math.sqrt(cases)))
+        // cases = (mymap.getZoom() * zoomMod * 1.2) + (cases) + 1**(Math.sqrt(cases))
     }
     
     dotObj = L.icon({
@@ -224,17 +225,24 @@ function drawSchools(day_span){
                     popupStr += 'Students: ' + row.Student_Count+ '<br>';
                     popupStr += 'Students Vaccinated: ' + vax+ '%<br>';
                 }
-                case_val = row[day_span];
+                // case_val = row[day_span];
+                tempCases = row[day_span];
+                if (row.Student_Count!=0){
+                    tempCases = tempCases/row.Student_Count
+                } else {
+                    tempCases = tempCases/1000
+                }
+                // case_val = tempCases * 100
+                case_val = tempCases * 100
+                popupStr += 'caseVal: ' + case_val+ '%<br>';
+
+
                 var marker = L.marker([row.Latitude, row.Longitude], {
                     
                     title: row.School,
-                    // icon: dot(row["gTotal"])//
                     icon: dot(case_val)//
-                    // icon: dot(row["14Total"])//
-                    //renderer: myRenderer
                 }).bindPopup(popupStr);
                 marker.addTo(markerLayer);
-                // marker.addTo(mymap);
                 
             };
             var dropDownBox = document.getElementById("schoolBox");
