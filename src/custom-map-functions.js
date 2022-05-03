@@ -1,7 +1,65 @@
 //set default map view
 var mymap;
-var timeLength = "14Total";
+var timeLength = "7Total";
+var caseData = true;
+var relative = true;
+var dot1Val = 0.5;
+var dot2Val = 1;
+var dot3Val = 2.5;
+var dot4Val = 5;
 // var myRenderer = L.canvas({ padding: 0.5, tolerance: 20 });
+
+function validateDataCheckbox(uncheckbox) {
+    document.getElementById(uncheckbox).checked = false;
+    showPercent();
+}
+
+function showPercent() {
+    percent = document.getElementsByClassName("percent")
+    if (document.getElementById("showRelative").checked) {
+        for (var i=0; i<percent.length; i++) {
+            percent[i].innerText = "%";
+        }
+    } else {
+        for (var i=0; i<percent.length; i++) {
+            percent[i].innerText = "";
+        }
+    }
+}
+
+function pushUpdate() {
+    timeLength = document.getElementById("timeSpan").value;
+    // caseData =  document.getElementById("showCases").checked;
+    relative =  document.getElementById("showRelative").checked;
+    dot1Val = document.getElementById("dot1").value;
+    dot2Val = document.getElementById("dot2").value;
+    dot3Val = document.getElementById("dot3").value;
+    dot4Val = document.getElementById("dot4").value;
+    refreshMarkers();
+}
+
+function shuffleDots(number) {
+    var thisDot = Number(document.getElementById("dot" + number).value);
+    if (number == 4) {
+        document.getElementById("dot" + (number+1) + "lower").innerText = "> " + thisDot;
+    } else {
+        document.getElementById("dot" + (number+1) + "lower").innerText = "> " + thisDot + " to ";
+    }
+    if (number < 4) {
+        if (Number(document.getElementById("dot" + (number+1)).value) < thisDot) {
+            document.getElementById("dot" + (number+1)).value = thisDot;
+            shuffleDots(number+1);
+        } 
+    }
+    if (number > 1) {
+
+        if (Number(document.getElementById("dot" + (number-1)).value) > thisDot) {
+            document.getElementById("dot" + (number-1)).value = thisDot;
+            shuffleDots(number-1);
+        } 
+    }
+}
+
 
 function setMapView(lat, long, zoom) {
 return L.map('mapid').setView([lat, long], zoom);
@@ -70,19 +128,6 @@ function success(pos) { // need to add logic for if outside of a reasonable boun
 // sets the size of the case dot
 function dot(cases){
     var dotFile = "";
-    if (cases <= 0){
-        dotFile = "./images/dot0.png";
-    } else if (cases <= .5) {
-        dotFile = "./images/dot1.png";
-    } else if (cases < 1) {
-        dotFile = "./images/dot2.png";
-    } else if (cases < 2.5) {
-        dotFile = "./images/dot3.png";
-    } else if (cases < 5) {
-        dotFile = "./images/dot4.png";
-    } else if (cases >= 5) {
-        dotFile = "./images/dot5.png";
-    };
 
     if (mymap.getZoom() <= 10) {
         zoomMod = 0.7
@@ -91,69 +136,46 @@ function dot(cases){
     } else {
         zoomMod  = 1
     }
+
     if (cases <= 0){
-        cases = (mymap.getZoom() * zoomMod - 6) + 1**(Math.sqrt(0))
-    } else {
-        cases = (mymap.getZoom() * zoomMod * 1.2) + ((cases) * (Math.sqrt(cases)))
-    }
+        dotFile = "./images/dot0.png";
+        dotSize = (mymap.getZoom() * zoomMod - 6) + 1
+    } else if (cases <= dot1Val) {
+        dotFile = "./images/dot1.png";
+        dotSize = (mymap.getZoom() * zoomMod - 6) + 5
+    } else if (cases <= dot2Val) {
+        dotFile = "./images/dot2.png";
+        dotSize = (mymap.getZoom() * zoomMod - 6) + 10
+    } else if (cases <= dot3Val) {
+        dotFile = "./images/dot3.png";
+        dotSize = (mymap.getZoom() * zoomMod - 6) + 15
+    } else if (cases <= dot4Val) {
+        dotFile = "./images/dot4.png";
+        dotSize = (mymap.getZoom() * zoomMod - 6) + 20
+    } else if (cases > dot4Val) {
+        dotFile = "./images/dot5.png";
+        dotSize = (mymap.getZoom() * zoomMod - 6) + 30
+    };
+
     
     dotObj = L.icon({
         iconUrl: dotFile,
-        iconSize:     [cases, cases], // size of the icon
-        iconAnchor:   [cases/2, cases/2], // point of the icon which will correspond to marker's location
-        popupAnchor:  [0, -cases] // point from which the popup should open relative to the iconAnchor
+        iconSize:     [dotSize, dotSize], // size of the icon
+        iconAnchor:   [dotSize/2, dotSize/2], // point of the icon which will correspond to marker's location
+        popupAnchor:  [0, -dotSize] // point from which the popup should open relative to the iconAnchor
     });
     return dotObj;
 };
 function setDaySpan() {
-    
-    if (timeLength == "7Total") {
-        timeLength = "14Total"
-    } else {
-        timeLength = "7Total"
-    };
+
+    timeLength = document.getElementById("timeSpan").value;
+
     console.log(timeLength);
     refreshMarkers()
     titleLayer.remove();
     titleLayer.addTo(mymap);
 }
-var titleLayer = L.control({position: "topright"});
-titleLayer.onAdd = function(){
-    var div = L.DomUtil.create('div', 'myclass');
-    if (timeLength == "14Total") {
-        div.innerHTML= `
-        <center>
-            *COVID-19 cases reported<br>
-            in last 14 days<br>
-            <div class="flex">
-                    <div class="flex-auto  text-white font-bold bg-blue-700 hover:bg-blue-800 rounded p-1 cursor-pointer" onclick="setDaySpan()" id="rangeToggle">
-                    Change to 7 days</div>
-                    <div></div>
-            </div>
-        </center>
-        `;
-    } else {
-        div.innerHTML= `
-        <center>
-            *COVID-19 cases reported<br>
-            in last 7 days<br>
-            <div class="flex">
-                    <div class="flex-auto  text-white font-bold bg-blue-700 hover:bg-blue-800 rounded p-1 cursor-pointer" onclick="setDaySpan()" id="rangeToggle">
-                   Change to 14 days </div>
-                    <div></div>
-            </div>
-        </center>
-        `;
-        
-    };
 
-    // <button onclick='setDaySpan()'>Click</button>
-    // div.style.backgroundColor = "white"
-    div.style.padding = "5px"
-
-    return div;
-}
-titleLayer.addTo(mymap);
 
 var scaleHintLayer = L.control({position: "topleft"});
 scaleHintLayer.onAdd = function(){
@@ -220,18 +242,17 @@ function drawSchools(day_span){
                     popupStr += 'Students: ' + row.Student_Count+ '<br>';
                     popupStr += 'Students Vaccinated: ' + vax+ '%<br>';
                 }
-
                 case_val = row[day_span];
 
-
-                if (row.Student_Count!=0){
-                    case_val = (case_val/row.Student_Count)*100
-                    popupStr += 'Cases/Enrollment: ' + Math.round(case_val*10)/10 + '%<br>';
-                } else {
-                    case_val = (case_val/1000)*100
+                if (relative) {
+                    if (row.Student_Count!=0){
+                        case_val = (case_val/row.Student_Count)*100
+                        popupStr += 'Cases/Enrollment: ' + Math.round(case_val*10)/10 + '%<br>';
+                    } else {
+                        case_val = (case_val/1000)*100
+                    }
                 }
-
-
+                
                 var marker = L.marker([row.Latitude, row.Longitude], {
                     
                     title: row.School,

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-light">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A better dashboard for visualizing CPS COVID19 case data. Get a city-wide view of COVID cases at Chicago Public Schools">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <title>CPS Covid Tracker</title>
+    
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-array.v2.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"></script>
+    <!-- <script type="text/javascript" src="leaflet.ajax.min.js"></script> -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="max-w-4xl mx-auto bg-blue-100">
+    <header class="max-w-4xl mx-auto bg-blue-300 rounded">
+        <h1 class="text-4xl font-bold mt-5 mb-5 text-center">Chicago Public Schools* COVID-19 Case Tracker</h1>
+        <div align="center">   
+            <select align="center" id="schoolBox" onchange="gotoSchool();">
+                <option>Select a School</option>
+            </select>
+        </div>
+        <br>     
+    </header>
+    <!-- <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+        <div id="totalCasesViz"></div>
+        <div id="dailyCasesViz"></div>
+    </div> -->
+    <!-- <div class="grid grid-cols-3 grid-rows-1 gap-2 text-center gap-4 mb-2">
+        <div class="bg-blue-300 rounded" id="newToday"></div>
+        <button class="text-white bg-blue-700 hover:bg-blue-800 py-2 px-4 rounded" id="lastCPSUpdate" onclick="location.href='./newcases.html'">
+        </button>
+        <div class="bg-blue-300 rounded" id="Average7Day"></div>
+    </div> -->
+    <br>
+    <div class="grid sm:grid-cols-4 sm:grid-rows-5 grid-cols-1 grid-rows-6 gap-2 mb-2">
+        
+        <div class="sm:col-start-1 sm:col-span-1 sm:row-start-1 sm:row-span-3 col-start-1 col-span-1 row-start-1 row-span-3 gap-2 rounded place-items-stretch">
+        <!-- <div class="col-start-1 col-span-1 row-start-1 gap-2 rounded place-items-stretch"> -->
+            <div class="grid sm:grid-cols-1 sm:grid-rows-2 grid-cols-2 grid-rows-2 px-2 py-2 space-y-2 place-items-left">
+                <button class="text-white font-bold bg-blue-700 hover:bg-blue-800 py-2 px-4 rounded" onclick="location.href='./index.html'">
+                    Back Home
+                </button>
+                <span>
+                    <label for="timeSpan">Timespan:</label>
+                    <select name="timeSpan" id="timeSpan">
+                        <option value="7Total" selected>7 Days</option>
+                        <option value="14Total">14 Days</option>
+                        <option value="21Total">21 Days</option>
+                        <option value="gTotal">All Days</option>
+                    </select>
+                </span>
+<!-- 
+                <span>
+                    <input type="checkbox" id="showCases" name="showCases" value="showCases" onclick="validateDataCheckbox('showVax')" checked>
+                    <label for="showCases"> Case Data</label>
+                </span>
+
+                <span>
+                    <input type="checkbox" id="showVax" name="showVax" value="showVax" onclick="validateDataCheckbox('showCases')">
+                    <label for="showVax"> Vaccination Data</label>
+                </span>
+                <hr color="black"> -->
+
+                <span>
+                    <input type="checkbox" id="showAbsolute" name="showAbsolute" value="showAbsolute" onclick="validateDataCheckbox('showRelative')">
+                    <label for="showAbsolute">Display as Absolute</label>
+                </span>
+
+                <span>
+                    <input type="checkbox" id="showRelative" name="showRelative" value="showRelative" onclick="validateDataCheckbox('showAbsolute')" checked>
+                    <label for="showRelative">Display as Relative</label>
+                </span>
+
+                <hr color="black">
+
+
+                <div class="color-selectors" style="white-space: nowrap">
+                    <img src="images/dot0.png" width="10%" height="auto" style="display: inline;">
+                    <label for="dot0">0 (or less) </label>
+                    <label class="percent" for="dot0">%</label>
+                </div>
+
+                <div class="color-selectors" style="white-space: nowrap">
+                    <img src="images/dot1.png" width="10%" height="auto" style="display: inline;">
+                    <label for="dot1">0 to </label>
+                    <input type="text" id="dot1" name="dot1" size="2" value="0.5" onchange="shuffleDots(1)">
+                    <label class="percent" for="dot1">%</label>
+                </div>
+
+                <div class="color-selectors" style="white-space: nowrap">
+                    <img src="images/dot2.png" width="10%" height="auto" style="display: inline;">
+                    <label id="dot2lower" for="dot2"> > 0.5 to </label>
+                    <input type="text" id="dot2" name="dot2" size="2" value="1" onchange="shuffleDots(2)">
+                    <label class="percent" for="do2">%</label>
+                </div>
+
+                <div class="color-selectors" style="white-space: nowrap">
+                    <img src="images/dot3.png" width="10%" height="auto" style="display: inline;">
+                    <label id="dot3lower" for="dot3">> 1 to </label>
+                    <input type="text" id="dot3" name="dot3" size="2" value="2.5" onchange="shuffleDots(3)">
+                    <label class="percent" for="dot3">%</label>
+                </div>
+
+                <div class="color-selectors" style="white-space: nowrap">
+                    <img src="images/dot4.png" width="10%" height="auto" style="display: inline;">
+                    <label id="dot4lower" for="dot4">> 2.5 to </label>
+                    <input type="text" id="dot4" name="dot4" size="2" value="5" onchange="shuffleDots(4)"> 
+                    <label class="percent" for="dot4">%</label>
+                </div>
+
+                <div class="color-selectors" style="white-space: nowrap">
+                    <img src="images/dot5.png" width="10%" height="auto" style="display: inline;">
+                    <label id="dot5lower" for="dot5"> > 5</label>
+                    <label class="percent" for="dot5">%</label>
+                </div>
+
+                <button class="text-white font-bold bg-blue-700 hover:bg-blue-800 py-2 px-4 rounded" onclick="pushUpdate();">
+                    Update
+                </button>
+            </div>  
+        </div>
+
+        <div class="sm:col-start-2 sm:col-span-3 sm:row-start-1 sm:row-span-5 col-start-1 col-span-1 row-start-2 row-span-5 rounded" id="mapid"></div>
+
+        <div class="sm:col-start-1 sm:col-span-1 sm:row-start-4 sm:row-span-2 col-start-1 col-span-1 row-start-4 row-span-2 bg-blue-300 rounded">
+            <div class="grid grid-cols-1 grid-rows-2 px-2 py-2">
+                <p class="row-start-1 row-span-1 px-2 py-2 rounded">Read the <a class="font-semibold text-blue-800" href="./faq.html">FAQ</a></p>
+                <!-- <p class="row-start-2 row-span-1 px-2 py-2 rounded">Read the <a class="font-semibold text-blue-800" href="./faq.html">FAQ</a></p> -->
+            </div>
+        </div>
+
+    </div>    
+    <div class="bg-blue-300 rounded py-2 px-2">
+        <p>*This site and its creator are neither affiliated nor claim affiliation with the Chicago Public School District.</p>
+        <p>The data used to power this dashboard is publicly available and can be found <a class="font-semibold text-blue-800" href="https://www.cps.edu/school-reopening-2020/">here</a>.</p>
+        <p align="right">Created with &hearts; <a class="font-semibold text-blue-800" href="https://jakobondrey.com"> jakobondrey.com</a></p>
+        <p align="right"><a class="font-semibold text-blue-800" href="https://buymeacoffee.com/misterjacko">Buy me a &#9749;</a></p>
+    </div>
+        
+    <!-- <script type="text/javascript" src="indexgraphs.js"></script> -->
+    <script type="text/javascript" src="custom-map-functions.js"></script>
+</body>
+</html>
