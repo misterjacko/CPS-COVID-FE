@@ -188,10 +188,10 @@ scaleHintLayer.onAdd = function(){
 }
 scaleHintLayer.addTo(mymap);
 
-var scaleControlLayer = L.control({position: "topleft"});
+var scaleControlLayer = L.control({position: "topright"});
 scaleControlLayer.onAdd = function(){
     var div = L.DomUtil.create('div', 'myclass');
-    div.innerHTML= "<img src='./images/scale.png'/>";
+    div.innerHTML= "<center>cpscovid.com<br>Custom Map</center>";
     return div;
 }
 scaleControlLayer.addTo(mymap);

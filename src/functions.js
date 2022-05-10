@@ -131,6 +131,37 @@ titleLayer.onAdd = function(){
                     <div></div>
             </div>
         </center>
+        <div><b>Map Key:</b> (cases/enrolled)</div>
+        <div class="color-selectors" style="white-space: nowrap">&emsp;
+            <img src="images/dot0.png" width="10%" height="auto" style="display: inline;">
+            <label for="dot0">0 (or less) </label>
+            <label class="percent" for="dot0">%</label>
+        </div>
+
+        <div class="color-selectors" style="white-space: nowrap">&emsp;
+            <img src="images/dot1.png" width="10%" height="auto" style="display: inline;">
+            <label for="dot1">>0 to 0.5%</label>
+        </div>
+
+        <div class="color-selectors" style="white-space: nowrap">&emsp;
+            <img src="images/dot2.png" width="10%" height="auto" style="display: inline;">
+            <label id="dot2lower" for="dot2"> >0.5% to 1%</label>
+        </div>
+
+        <div class="color-selectors" style="white-space: nowrap">&emsp;
+            <img src="images/dot3.png" width="10%" height="auto" style="display: inline;">
+            <label id="dot3lower" for="dot3">>1% to 2.5%</label>
+        </div>
+
+        <div class="color-selectors" style="white-space: nowrap">&emsp;
+            <img src="images/dot4.png" width="10%" height="auto" style="display: inline;">
+            <label id="dot4lower" for="dot4">>2.5% to 5%</label>
+        </div>
+
+        <div class="color-selectors" style="white-space: nowrap">&emsp;
+            <img src="images/dot5.png" width="10%" height="auto" style="display: inline;">
+            <label id="dot5lower" for="dot5"> >5%</label>
+        </div>
         `;
     } else {
         div.innerHTML= `
@@ -143,6 +174,38 @@ titleLayer.onAdd = function(){
                     <div></div>
             </div>
         </center>
+        </center>
+        <div><b>Map Key:</b> (cases/enrolled)</div>
+        <div class="color-selectors" style="white-space: nowrap">&emsp;
+            <img src="images/dot0.png" width="10%" height="auto" style="display: inline;">
+            <label for="dot0">0 (or less) </label>
+            <label class="percent" for="dot0">%</label>
+        </div>
+
+        <div class="color-selectors" style="white-space: nowrap">&emsp;
+            <img src="images/dot1.png" width="10%" height="auto" style="display: inline;">
+            <label for="dot1">>0 to 0.5%</label>
+        </div>
+
+        <div class="color-selectors" style="white-space: nowrap">&emsp;
+            <img src="images/dot2.png" width="10%" height="auto" style="display: inline;">
+            <label id="dot2lower" for="dot2"> >0.5% to 1%</label>
+        </div>
+
+        <div class="color-selectors" style="white-space: nowrap">&emsp;
+            <img src="images/dot3.png" width="10%" height="auto" style="display: inline;">
+            <label id="dot3lower" for="dot3">>1% to 2.5%</label>
+        </div>
+
+        <div class="color-selectors" style="white-space: nowrap">&emsp;
+            <img src="images/dot4.png" width="10%" height="auto" style="display: inline;">
+            <label id="dot4lower" for="dot4">>2.5% to 5%</label>
+        </div>
+
+        <div class="color-selectors" style="white-space: nowrap">&emsp;
+            <img src="images/dot5.png" width="10%" height="auto" style="display: inline;">
+            <label id="dot5lower" for="dot5"> >5%</label>
+        </div>
         `;
         
     };
@@ -166,13 +229,13 @@ scaleHintLayer.onAdd = function(){
 }
 scaleHintLayer.addTo(mymap);
 
-var scaleControlLayer = L.control({position: "topleft"});
-scaleControlLayer.onAdd = function(){
-    var div = L.DomUtil.create('div', 'myclass');
-    div.innerHTML= "<img src='./images/scale.png'/>";
-    return div;
-}
-scaleControlLayer.addTo(mymap);
+// var scaleControlLayer = L.control({position: "topleft"});
+// scaleControlLayer.onAdd = function(){
+//     var div = L.DomUtil.create('div', 'myclass');
+//     div.innerHTML= "<img src='./images/scale.png'/>";
+//     return div;
+// }
+// scaleControlLayer.addTo(mymap);
 
 var Light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',

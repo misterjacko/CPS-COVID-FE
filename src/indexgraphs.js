@@ -33,6 +33,7 @@ function setWeek(date){
     return new Date(date.setDate(diff));
 };
 //Read the data
+// d3.csv("https://www.cpscovid.com/data/CPStotals.csv",
 d3.csv("./data/CPStotals.csv",
     // format variables:
     function(d){
