@@ -5,7 +5,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A better dashboard for visualizing CPS COVID19 case data. Get a city-wide view of COVID cases at Chicago Public Schools">
+    <meta http-equiv="Cache-control" content="no-cache">
     <title>CPS Covid Tracker</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
     
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
@@ -37,19 +42,13 @@
     </div>
     <div class="grid grid-cols-3 grid-rows-1 gap-2 text-center gap-4 mb-2">
         <div class="bg-blue-300 rounded" id="newToday"></div>
-        <!-- This will be left here in case the new cases button needs to be disabled -->
-        <!-- <div class="bg-blue-300 rounded" id="lastCPSUpdate"></div> -->
         <button class="text-white bg-blue-700 hover:bg-blue-800 py-2 px-4 rounded" id="lastCPSUpdate" onclick="location.href='./newcases.html'">
         </button>
-
         <div class="bg-blue-300 rounded" id="Average7Day"></div>
     </div>
     <div class="grid sm:grid-cols-4 sm:grid-rows-3 grid-cols-1 grid-rows-6 gap-2 mb-2">
-        
-        <div class="sm:col-start-1 sm:col-span-1 sm:row-start-1 sm:row-span-1 col-start-1 col-span-1 row-start-1 row-span-1 gap-2 rounded place-items-stretch">
-        <!-- <div class="col-start-1 col-span-1 row-start-1 gap-2 rounded place-items-stretch"> -->
+        <div class="sm:col-start-1 sm:col-span-1 sm:row-start-1 sm:row-span-1 col-start-1 col-span-1 row-start-1 row-span-1 gap-2 rounded">
             <div class="grid sm:grid-cols-1 sm:grid-rows-2 grid-cols-2 grid-rows-2 px-2 py-2 space-y-2 place-items-center">
-            <!-- <div class="grid grid-cols-1 grid-rows-2 px-2 py-2 space-y-2 place-items-center"> -->
                 <button class="text-white font-bold bg-blue-700 hover:bg-blue-800 py-2 px-4 rounded" id="getLocation" onclick="getLocation();">
                     Share Location
                 </button>
@@ -67,11 +66,9 @@
 
         <div class="sm:col-start-2 sm:col-span-3 sm:row-start-1 sm:row-span-3 col-start-1 col-span-1 row-start-2 row-span-4 rounded" id="mapid"></div>
 
-        <div class="sm:col-start-1 sm:col-span-1 sm:row-start-2 sm:row-span-2 col-start-1 col-span-1 row-start-6 row-span-1 bg-blue-300 rounded">
-            <div class="grid grid-cols-1 grid-rows-2 px-2 py-2">
-                <p class="row-start-1 row-span-1 px-2 py-2 rounded">Read the <a class="font-semibold text-blue-800" href="./faq.html">FAQ</a></p>
-                <!-- <p class="row-start-2 row-span-1 px-2 py-2 rounded">Read the <a class="font-semibold text-blue-800" href="./faq.html">FAQ</a></p> -->
-            </div>
+        <div class="sm:col-start-1 sm:col-span-1 sm:row-start-2 sm:row-span-2 col-start-1 col-span-1 row-start-6 row-span-1 bg-blue-300 items-start rounded">
+            <div class="row-start-1 row-span-1 px-2 py-2 rounded"> Make a <a class="font-semibold text-blue-800" href="./custom-map.html">Custom Map</a></div>
+            <div class="row-start-2 row-span-1 px-2 py-2 rounded"> Read the <a class="font-semibold text-blue-800" href="./faq.html">FAQ</a></div>
         </div>
 
     </div>    

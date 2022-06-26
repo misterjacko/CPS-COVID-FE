@@ -1,3 +1,5 @@
-data/*
-
+src/data
 src/leaflet.ajax.min.js
+src/node_modules
+src/package-lock.json
+src/package.json
