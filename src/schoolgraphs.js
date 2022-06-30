@@ -65,28 +65,28 @@ function getDailyTotals(schoolName) {
     d3.csv("./data/newFormatTest.csv",
         function(data) {            
             var dailyTotals = [];
-            var total = parseInt(data[9][schoolName], 10);
+            var total = parseInt(data[9][schoolName], 10); // 9 is index of total in csv
             var distance = data.length -1
             graphSpan = getSpanLength()
-            if (graphSpan > distance-10){
+            if (graphSpan > distance-11){ // this increases with added columns before days start
                 graphSpan = 0
-            }
+            };
 
             switch(graphSpan) {
                 case 0:
                 case "0":
                 case "sy":
-                    caseSpan = distance-10;
+                    caseSpan = distance-11; // this increases with added days before days start
                     break;
                 default:
                     caseSpan = graphSpan;
                     break;
 
-            }
+            };
 
             var j=0;
             for (var i = distance; j < caseSpan; i--) {
-                if (graphSpan == "sy" && data[i].School == "20210828"){
+                if (graphSpan == "sy" && data[i].School == "20220614"){
                     break
                 }
                 var date = d3.timeParse("%Y%m%d")(data[i].School);
@@ -99,11 +99,11 @@ function getDailyTotals(schoolName) {
             total = parseInt(data[9][schoolName], 10);
             var syStartCase = total;
             for (var i = distance; i > 0; i--) {
-                if (data[i].School == "20210828") {
+                if (data[i].School == "20220614") {
                     break
                 };
                 syStartCase -= data[i][schoolName];
-        }   ;
+            };
 
             // add school summary data:
             var formatDate = d3.timeFormat("%a %b %-d");
@@ -171,13 +171,13 @@ function getDailyTotals(schoolName) {
             var grandTotal = total - syStartCase;
             if (grandTotal == 1){
                 grandTotalCount.append("text")
-                .text(grandTotal + " case SY21-22")
+                .text(grandTotal + " case Summer 22")
             } else if (grandTotal > 1) {
                 grandTotalCount.append("text")
-                .text(grandTotal + " cases SY21-22")
+                .text(grandTotal + " cases Summer 22")
             } else {
                 grandTotalCount.append("text")
-                .text("0 cases SY21-22")
+                .text("0 cases Summer 22")
             }
             // Add Title
             totalCase.append("text")
