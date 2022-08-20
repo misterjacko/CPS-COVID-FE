@@ -62,8 +62,8 @@ var grandTotalCount = d3.select("#grandTotal");
 
 function getDailyTotals(schoolName) {
     // d3.csv("https://cpscovid.com/data/newFormatTest.csv",
-    d3.csv("https://cpscovid.com/data/tpnewyear.csv",
-    // d3.csv("./data/newFormatTest.csv",
+    // d3.csv("https://cpscovid.com/data/tpnewyear.csv",
+    d3.csv("./data/newFormatTest.csv",
         function(data) {            
             var dailyTotals = [];
             var total = parseInt(data[9][schoolName], 10); // 9 is index of total in csv
