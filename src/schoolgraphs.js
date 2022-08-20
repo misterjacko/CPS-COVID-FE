@@ -62,13 +62,14 @@ var grandTotalCount = d3.select("#grandTotal");
 
 function getDailyTotals(schoolName) {
     // d3.csv("https://cpscovid.com/data/newFormatTest.csv",
-    d3.csv("./data/newFormatTest.csv",
+    d3.csv("https://cpscovid.com/data/tpnewyear.csv",
+    // d3.csv("./data/newFormatTest.csv",
         function(data) {            
             var dailyTotals = [];
             var total = parseInt(data[9][schoolName], 10); // 9 is index of total in csv
             var distance = data.length -1
             graphSpan = getSpanLength()
-            if (graphSpan > distance-11){ // this increases with added columns before days start
+            if (graphSpan > distance-12){ // this increases with added columns before days start
                 graphSpan = 0
             };
 
@@ -76,7 +77,7 @@ function getDailyTotals(schoolName) {
                 case 0:
                 case "0":
                 case "sy":
-                    caseSpan = distance-11; // this increases with added days before days start
+                    caseSpan = distance-12; // this increases with added days before days start
                     break;
                 default:
                     caseSpan = graphSpan;
@@ -86,7 +87,7 @@ function getDailyTotals(schoolName) {
 
             var j=0;
             for (var i = distance; j < caseSpan; i--) {
-                if (graphSpan == "sy" && data[i].School == "20220614"){
+                if (graphSpan == "sy" && data[i].School == "20220818"){
                     break
                 }
                 var date = d3.timeParse("%Y%m%d")(data[i].School);
@@ -99,7 +100,7 @@ function getDailyTotals(schoolName) {
             total = parseInt(data[9][schoolName], 10);
             var syStartCase = total;
             for (var i = distance; i > 0; i--) {
-                if (data[i].School == "20220614") {
+                if (data[i].School == "20220818") {
                     break
                 };
                 syStartCase -= data[i][schoolName];
@@ -171,13 +172,13 @@ function getDailyTotals(schoolName) {
             var grandTotal = total - syStartCase;
             if (grandTotal == 1){
                 grandTotalCount.append("text")
-                .text(grandTotal + " case Summer 22")
+                .text(grandTotal + " case SY 22-23")
             } else if (grandTotal > 1) {
                 grandTotalCount.append("text")
-                .text(grandTotal + " cases Summer 22")
+                .text(grandTotal + " cases SY 22-23")
             } else {
                 grandTotalCount.append("text")
-                .text("0 cases Summer 22")
+                .text("0 cases SY 22-23")
             }
             // Add Title
             totalCase.append("text")
