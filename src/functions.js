@@ -244,9 +244,8 @@ var Light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}
 }).addTo(mymap);
 var markerLayer = L.layerGroup()
     // var markers = L.markerClusterGroup()
-// var AllDataurl = "https://cpscovid.com/data/allCpsCovidDataVax.csv"
-var AllDataurl = "https://cpscovid.com/data/allCpsCovidData.csv"
-// var AllDataurl = "./data/allCpsCovidData.csv"
+// var AllDataurl = "https://cpscovid.com/data/allCpsCovidData.csv"
+var AllDataurl = "./data/allCpsCovidData.csv"
 function drawSchools(day_span){
     // var day_span = "7Total"
     var data = Papa.parse(AllDataurl, {
